@@ -7,88 +7,12 @@
     android:scaleType="centerCrop"
     tools:context=".SignInActivity">
 
-    <FrameLayout
-        android:id="@+id/sign_in_button"
-        android:layout_width="300dp"
-        android:layout_height="56dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="120dp"
-        android:background="@drawable/sign_in_button"
-        android:clickable="true"
-        android:elevation="4dp"
-        android:focusable="true"
-        android:foreground="?selectableItemBackground"
-        android:onClick="load"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <TextView
-            android:id="@+id/text_sign_in"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="sans-serif-light"
-            android:text="Вход"
-            android:textColor="@color/white"
-            android:textSize="24dp" />
-
-        <ProgressBar
-            android:id="@+id/progress_bar_sign_in"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_gravity="center"
-            android:visibility="invisible" />
-    </FrameLayout>
-
-    <View
-        android:id="@+id/reveal"
+    <fragment
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/purple_200"
-        android:visibility="invisible"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-16dp" />
-
-    <EditText
-        android:id="@+id/user_login"
-        android:layout_width="253dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="200dp"
-        android:ems="10"
-        android:hint="User name"
-        android:inputType="textEmailAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/user_password"
-        android:layout_width="253dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="40dp"
-        android:ems="10"
-        android:hint="Password"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="@+id/reveal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_login" />
-
-    <TextView
-        android:id="@+id/sign_in_text_view"
-        android:layout_width="238dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="40dp"
-        android:fontFamily="sans-serif-light"
-        android:gravity="center"
-        android:text="Авторизация"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/reveal" />
-
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_authorization" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
