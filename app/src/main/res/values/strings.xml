@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">FootballClub</string>
+
+    <string name="sign_in">Войти</string>
+    <string name="sign_up">Зарегистрироваться</string>
+
+    <string name="home_message">Пройдите авторизацию\n\nЛибо зарегистрируйте новый аккаунт</string>
+
+    <string name="password">Пароль</string>
+    <string name="repeat_password">Повторите пароль</string>
+    <string name="e_mail">Адрес электронной почты</string>
 </resources>
