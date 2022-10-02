@@ -5,11 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BlendMode
-import android.graphics.BlendModeColorFilter
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -22,11 +18,10 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
-import com.bumptech.glide.Glide
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.ftclub.footballclub.MainActivity
 import com.ftclub.footballclub.R
-import com.ftclub.footballclub.SignInActivity
-import com.ftclub.footballclub.databinding.FragmentAuthorizationBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -39,23 +34,33 @@ import kotlin.math.max
  * create an instance of this fragment.
  */
 class AuthorizationFragment : Fragment() {
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        val view =  inflater.inflate(R.layout.fragment_authorization, container, false)
+        val view = inflater.inflate(R.layout.fragment_authorization, container, false)
 
         return view
     }
 
     override fun onStart() {
         super.onStart()
-        isViewsVisible(true)
 
+        isViewsVisible(true)
+        buttonActions()
+    }
+
+    private fun buttonActions() {
         val signInButton = requireActivity().findViewById<FrameLayout>(R.id.sign_in_button)
-        signInButton!!.setOnClickListener {
+        signInButton.setOnClickListener {
             userPermission()
+        }
+
+        val toSignUpButton = requireActivity().findViewById<FrameLayout>(R.id.to_home_page_from_authorization_page)
+        toSignUpButton.setOnClickListener {
+            findNavController().navigate(R.id.action_authorizationFragment_to_homeFragment)
         }
     }
 
@@ -207,16 +212,13 @@ class AuthorizationFragment : Fragment() {
     private fun isViewsVisible(visibility: Boolean) {
         val userLogin = requireActivity().findViewById<EditText>(R.id.user_login)
         val userPassword = requireActivity().findViewById<EditText>(R.id.user_password)
-        val signInTextView = requireActivity().findViewById<TextView>(R.id.sign_in_text_view)
 
         if (visibility) {
             userLogin.visibility = View.VISIBLE
             userPassword.visibility = View.VISIBLE
-            signInTextView.visibility = View.VISIBLE
         } else {
             userLogin.visibility = View.INVISIBLE
             userPassword.visibility = View.INVISIBLE
-            signInTextView.visibility = View.INVISIBLE
         }
     }
 
