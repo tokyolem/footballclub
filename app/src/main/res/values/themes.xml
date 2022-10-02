@@ -11,7 +11,22 @@
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">@color/transparent</item>
         <!-- Customize your theme here. -->
+        <item name="android:actionBarStyle">@style/AppBarStyle</item>
+        <item name="android:statusBarColor">@color/AppBarColor</item>
+    </style>
+
+    <style name="AppBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/AppBarColor</item>
+        <item name="android:titleTextStyle">@style/TextAppearance</item>
+    </style>
+
+    <!-- стиль для текста -->
+    <style name="TextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="Theme.LawsRB.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="elevation">0dp</item>
     </style>
 </resources>
