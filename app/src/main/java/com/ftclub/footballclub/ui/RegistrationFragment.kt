@@ -21,7 +21,6 @@ class RegistrationFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
         val view = inflater.inflate(R.layout.fragment_registration, container, false)
 
         return view
@@ -29,6 +28,10 @@ class RegistrationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        navigation()
+    }
+
+    private fun navigation() {
         val toSignInButton = requireActivity().findViewById<FrameLayout>(R.id.to_home_page_from_registration_page)
         toSignInButton.setOnClickListener {
             findNavController().navigate(R.id.action_registrationFragment_to_homeFragment)
