@@ -31,9 +31,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-light"
-            android:text="Вход"
+            android:text="@string/sign_in"
             android:textColor="@color/white"
-            android:textSize="24dp" />
+            android:textSize="24sp" />
 
         <ProgressBar
             android:id="@+id/progress_bar_sign_in"
@@ -58,7 +58,7 @@
         android:layout_height="52dp"
         android:layout_marginTop="256dp"
         android:ems="10"
-        android:hint="Имя пользователя"
+        android:hint="@string/e_mail"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -70,7 +70,7 @@
         android:layout_height="52dp"
         android:layout_marginTop="40dp"
         android:ems="10"
-        android:hint="Пароль"
+        android:hint="@string/password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="@+id/reveal"
         app:layout_constraintStart_toStartOf="parent"

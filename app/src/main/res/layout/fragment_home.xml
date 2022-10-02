@@ -29,9 +29,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-light"
-            android:text="Авторизация"
+            android:text="@string/sign_in"
             android:textColor="@color/white"
-            android:textSize="24dp" />
+            android:textSize="24sp" />
 
     </FrameLayout>
 
@@ -60,9 +60,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:fontFamily="sans-serif-light"
-            android:text="Регистрация"
+            android:text="@string/sign_up"
             android:textColor="@color/white"
-            android:textSize="24dp" />
+            android:textSize="24sp" />
     </FrameLayout>
 
     <TextView
@@ -71,7 +71,7 @@
         android:layout_height="89dp"
         android:fontFamily="sans-serif-light"
         android:gravity="center"
-        android:text="Пройдите авторизацию\n\nЛибо зарегистрируйте новый аккаунт"
+        android:text="@string/home_message"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/to_authorization_page"
         app:layout_constraintEnd_toEndOf="parent"
