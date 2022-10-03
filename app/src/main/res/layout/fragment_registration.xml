@@ -58,7 +58,7 @@
         app:layout_constraintTop_toBottomOf="@+id/user_new_password" />
 
     <FrameLayout
-        android:id="@+id/sign_un_button"
+        android:id="@+id/sign_up_button"
         android:layout_width="300dp"
         android:layout_height="56dp"
         android:layout_alignParentBottom="true"
