@@ -1,4 +1,4 @@
-package com.ftclub.footballclub.ui
+package com.ftclub.footballclub.ui.home
 
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +10,7 @@ import android.widget.FrameLayout
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.ftclub.footballclub.R
+import com.ftclub.footballclub.SignInActivity
 import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
 import com.ftclub.footballclub.basic.room.accounts.viewModel.AccountsViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -23,10 +24,6 @@ import kotlinx.coroutines.launch
  */
 class HomeFragment : Fragment() {
 
-    private lateinit var accountsViewModel: AccountsViewModel
-
-    private var accountsList: List<Accounts>? = null
-
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     override fun onCreateView(
@@ -35,8 +32,6 @@ class HomeFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        accountsViewModel = ViewModelProviders.of(this)[AccountsViewModel::class.java]
-
         return view
     }
 
@@ -44,7 +39,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         coroutineScope.launch {
-            accountsList = accountsViewModel.getAccountsList()
+            accountsList = SignInActivity.accountsViewModel.getAccountsList()
             createDefaultAdminAccountIfNotExist()
         }
 
@@ -52,10 +47,10 @@ class HomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        buttonActions()
+        navigation()
     }
 
-    private fun buttonActions() {
+    private fun navigation() {
         val toAuthorizationFragment =
             requireActivity().findViewById<FrameLayout>(R.id.to_authorization_page)
         val toRegistrationFragment =
@@ -72,9 +67,13 @@ class HomeFragment : Fragment() {
 
     private fun createDefaultAdminAccountIfNotExist() {
         if (accountsList!!.isEmpty()) {
-            accountsViewModel.insertAccount(Accounts("admin", 1, "admin"))
+            SignInActivity.accountsViewModel.insertAccount(Accounts("admin", "admin", true))
         } else {
             return
         }
+    }
+
+    companion object {
+        var accountsList: List<Accounts>? = null
     }
 }
