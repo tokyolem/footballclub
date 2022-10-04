@@ -9,7 +9,6 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewAnimationUtils
@@ -164,9 +163,11 @@ class AuthorizationFragment : Fragment() {
     }
 
     private fun nextActionWithActivityChange() {
-        CoroutineScope(Dispatchers.Main).launch {
+        userScope.launch {
             delay(2000)
+            
             isViewsVisible(false)
+            
             revealButton()
             fadeOutProgressDialog()
             delayedStartNextActivity()
@@ -174,11 +175,13 @@ class AuthorizationFragment : Fragment() {
     }
 
     private fun nextActionWithoutActivityChange() {
-        CoroutineScope(Dispatchers.Main).launch {
+        userScope.launch {
             delay(2000)
+            
             fadeOutProgressDialog()
             resetSignInButton()
-            incorrectDataAnimation()
+            
+            incorrectAuthorizationDataAnimation()
             delay(2000)
             propertyAnimationHide()
         }
@@ -216,9 +219,11 @@ class AuthorizationFragment : Fragment() {
 
     private fun signIn() {
         val signInButton = requireActivity().findViewById<FrameLayout>(R.id.sign_in_button)
+        val userPasswordLine = requireActivity().findViewById<EditText>(R.id.user_password)
         signInButton.setOnClickListener {
             userScope.launch {
                 authorizationProcess()
+                userPasswordLine.clearFocus()
             }
         }
     }
@@ -229,30 +234,29 @@ class AuthorizationFragment : Fragment() {
         return currentAccount.component1().accountRole
     }
 
-    private suspend fun isPasswordAndUserLoginCorrect(
-        accountPassword: String,
-        accountEmail: String): Boolean {
+    private suspend fun isPasswordAndAccountEmailCorrect(
+        accountEmail: String,
+        accountPassword: String): Boolean {
         val currentAccount = SignInActivity.accountsViewModel.getAccountEmail(accountEmail)
-
-        for (account in currentAccount) {
+        var isCorrect = false
+        
+        for (account in currentAccount) 
             if (accountEmail == account.accountEmail
-                && accountPassword == account.hashPassword) {
-                return true
-            }
-        }
-
-        return false
+            && accountPassword == account.hashPassword) 
+                isCorrect = true
+        
+        return isCorrect
     }
 
     private suspend fun authorizationProcess() {
-        val userLoginLine = requireActivity().findViewById<EditText>(R.id.user_login)
-        val userPasswordLine = requireActivity().findViewById<EditText>(R.id.user_password)
+        val accountLoginLine = requireActivity().findViewById<EditText>(R.id.user_login)
+        val accountPasswordLine = requireActivity().findViewById<EditText>(R.id.user_password)
 
-        val userLogin = userLoginLine.text.toString()
-        val userPassword = userPasswordLine.text.toString()
+        val accountLogin = accountLoginLine.text.toString()
+        val accountPassword = accountPasswordLine.text.toString()
 
-        if (isPasswordAndUserLoginCorrect(userPassword, userLogin)) {
-            if (isAdministratorAccount(userLogin)) {
+        if (isPasswordAndAccountEmailCorrect(accountLogin, accountPassword)) {
+            if (isAdministratorAccount(accountLogin)) {
                 animateButtonWidth()
                 fadeOutTextAndShowProgressDialog()
                 nextActionWithActivityChange()
@@ -268,27 +272,28 @@ class AuthorizationFragment : Fragment() {
         }
     }
 
-    private fun incorrectDataAnimation() {
-        val userLoginLine = requireActivity().findViewById<EditText>(R.id.user_login)
-        val userPasswordLine = requireActivity().findViewById<EditText>(R.id.user_password)
+    private fun incorrectAuthorizationDataAnimation() {
+        val accountLoginLine = requireActivity().findViewById<EditText>(R.id.user_login)
+        val accountPasswordLine = requireActivity().findViewById<EditText>(R.id.user_password)
         val incorrectMessage = requireActivity().findViewById<TextView>(R.id.message)
 
         val animationBegin = AnimationUtils.loadAnimation(context, R.anim.little_trans_begin)
         val animationEnd = AnimationUtils.loadAnimation(context, R.anim.little_trans_end)
 
-        userLoginLine.backgroundTintList =
+
+        accountLoginLine.backgroundTintList =
             ColorStateList.valueOf(resources.getColor(R.color.incorrect_data, resources.newTheme()))
 
-        userPasswordLine.backgroundTintList =
+        accountPasswordLine.setText("")
+        accountPasswordLine.backgroundTintList =
             ColorStateList.valueOf(resources.getColor(R.color.incorrect_data, resources.newTheme()))
 
         incorrectMessage.visibility = View.VISIBLE
-        incorrectMessage.startAnimation(animationBegin)
-        incorrectMessage.startAnimation(animationEnd)
-        userLoginLine.startAnimation(animationBegin)
-        userLoginLine.startAnimation(animationEnd)
-        userPasswordLine.startAnimation(animationBegin)
-        userPasswordLine.startAnimation(animationEnd)
+        
+        accountLoginLine.startAnimation(animationBegin)
+        accountLoginLine.startAnimation(animationEnd)
+        accountPasswordLine.startAnimation(animationBegin)
+        accountPasswordLine.startAnimation(animationEnd)
     }
 
     private fun propertyAnimationHide() {
