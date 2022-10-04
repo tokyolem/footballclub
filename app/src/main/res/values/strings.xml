@@ -9,4 +9,6 @@
     <string name="password">Пароль</string>
     <string name="repeat_password">Повторите пароль</string>
     <string name="e_mail">Адрес электронной почты</string>
+
+    <string name="incorrect_message">Неправильный логин или пароль.\nПовторите попытку!</string>
 </resources>

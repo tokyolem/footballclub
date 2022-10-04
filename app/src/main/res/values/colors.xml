@@ -11,4 +11,5 @@
     <!-- Custom colors. -->
     <color name="transparent">#00000000</color>
     <color name="AppBarColor">#8dd7ae</color>
+    <color name="incorrect_data">#b80f0a</color>
 </resources>
