@@ -1,27 +1,31 @@
-package com.ftclub.footballclub.ui
+package com.ftclub.footballclub.ui.authorization
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
+import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
-import androidx.navigation.NavController
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.ftclub.footballclub.MainActivity
 import com.ftclub.footballclub.R
+import com.ftclub.footballclub.SignInActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -34,6 +38,8 @@ import kotlin.math.max
  * create an instance of this fragment.
  */
 class AuthorizationFragment : Fragment() {
+
+    private val userScope = CoroutineScope(Dispatchers.Main)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,36 +55,14 @@ class AuthorizationFragment : Fragment() {
         super.onStart()
 
         isViewsVisible(true)
-        buttonActions()
+        navigation()
+        signIn()
     }
 
-    private fun buttonActions() {
-        val signInButton = requireActivity().findViewById<FrameLayout>(R.id.sign_in_button)
-        signInButton.setOnClickListener {
-            userPermission()
-        }
-
+    private fun navigation() {
         val toSignUpButton = requireActivity().findViewById<FrameLayout>(R.id.to_home_page_from_authorization_page)
         toSignUpButton.setOnClickListener {
             findNavController().navigate(R.id.action_authorizationFragment_to_homeFragment)
-        }
-    }
-
-    private fun userPermission() {
-        val userLogin = requireActivity().findViewById<EditText>(R.id.user_login)
-        val userPassword = requireActivity().findViewById<EditText>(R.id.user_password)
-
-        val userNameFromLine = userLogin.text.toString()
-        val userPasswordFromLine = userPassword.text.toString()
-
-        if (userNameFromLine == "admin" && userPasswordFromLine == "admin"){
-            animateButtonWidth()
-            fadeOutTextAndShowProgressDialog()
-            nextActionWithActivityChange()
-        } else {
-            animateButtonWidth()
-            fadeOutTextAndShowProgressDialog()
-            nextActionWithoutActivityChange()
         }
     }
 
@@ -128,11 +112,11 @@ class AuthorizationFragment : Fragment() {
 
         revealView.visibility = View.VISIBLE
 
-        var cx = revealView.width
-        var cy = revealView.height
+        val cx = revealView.width
+        val cy = revealView.height
 
-        var x = (getFabWidth() / 2 + signInButton.x).toInt()
-        var y = (getFabWidth() / 2 + signInButton.y).toInt()
+        val x = (getFabWidth() / 2 + signInButton.x).toInt()
+        val y = (getFabWidth() / 2 + signInButton.y).toInt()
 
         val finalRadius = max(cx, cy) * 1.2f
 
@@ -194,6 +178,9 @@ class AuthorizationFragment : Fragment() {
             delay(2000)
             fadeOutProgressDialog()
             resetSignInButton()
+            incorrectDataAnimation()
+            delay(2000)
+            propertyAnimationHide()
         }
     }
 
@@ -225,5 +212,104 @@ class AuthorizationFragment : Fragment() {
     @SuppressLint("PrivateResource")
     private fun getFabWidth(): Float {
         return resources.getDimension(com.google.android.material.R.dimen.design_fab_size_normal)
+    }
+
+    private fun signIn() {
+        val signInButton = requireActivity().findViewById<FrameLayout>(R.id.sign_in_button)
+        signInButton.setOnClickListener {
+            userScope.launch {
+                authorizationProcess()
+            }
+        }
+    }
+
+    private suspend fun isAdministratorAccount(accountEmail: String): Boolean {
+        val currentAccount = SignInActivity.accountsViewModel.getAccountEmail(accountEmail)
+
+        return currentAccount.component1().accountRole
+    }
+
+    private suspend fun isPasswordAndUserLoginCorrect(
+        accountPassword: String,
+        accountEmail: String): Boolean {
+        val currentAccount = SignInActivity.accountsViewModel.getAccountEmail(accountEmail)
+
+        for (account in currentAccount) {
+            if (accountEmail == account.accountEmail
+                && accountPassword == account.hashPassword) {
+                return true
+            }
+        }
+
+        return false
+    }
+
+    private suspend fun authorizationProcess() {
+        val userLoginLine = requireActivity().findViewById<EditText>(R.id.user_login)
+        val userPasswordLine = requireActivity().findViewById<EditText>(R.id.user_password)
+
+        val userLogin = userLoginLine.text.toString()
+        val userPassword = userPasswordLine.text.toString()
+
+        if (isPasswordAndUserLoginCorrect(userPassword, userLogin)) {
+            if (isAdministratorAccount(userLogin)) {
+                animateButtonWidth()
+                fadeOutTextAndShowProgressDialog()
+                nextActionWithActivityChange()
+            } else {
+                animateButtonWidth()
+                fadeOutTextAndShowProgressDialog()
+                nextActionWithActivityChange()
+            }
+        } else {
+            animateButtonWidth()
+            fadeOutTextAndShowProgressDialog()
+            nextActionWithoutActivityChange()
+        }
+    }
+
+    private fun incorrectDataAnimation() {
+        val userLoginLine = requireActivity().findViewById<EditText>(R.id.user_login)
+        val userPasswordLine = requireActivity().findViewById<EditText>(R.id.user_password)
+        val incorrectMessage = requireActivity().findViewById<TextView>(R.id.message)
+
+        val animationBegin = AnimationUtils.loadAnimation(context, R.anim.little_trans_begin)
+        val animationEnd = AnimationUtils.loadAnimation(context, R.anim.little_trans_end)
+
+        userLoginLine.backgroundTintList =
+            ColorStateList.valueOf(resources.getColor(R.color.incorrect_data, resources.newTheme()))
+
+        userPasswordLine.backgroundTintList =
+            ColorStateList.valueOf(resources.getColor(R.color.incorrect_data, resources.newTheme()))
+
+        incorrectMessage.visibility = View.VISIBLE
+        incorrectMessage.startAnimation(animationBegin)
+        incorrectMessage.startAnimation(animationEnd)
+        userLoginLine.startAnimation(animationBegin)
+        userLoginLine.startAnimation(animationEnd)
+        userPasswordLine.startAnimation(animationBegin)
+        userPasswordLine.startAnimation(animationEnd)
+    }
+
+    private fun propertyAnimationHide() {
+        val userLoginLine = requireActivity().findViewById<EditText>(R.id.user_login)
+        val userPasswordLine = requireActivity().findViewById<EditText>(R.id.user_password)
+        val incorrectMessage = requireActivity().findViewById<TextView>(R.id.message)
+
+        val animationMessageHide = AnimationUtils.loadAnimation(context, R.anim.alpha_message)
+
+        val colorTo: Int = resources.getColor(R.color.AppBarColor, resources.newTheme())
+        val colorFrom: Int = resources.getColor(R.color.incorrect_data, resources.newTheme())
+
+        val colorAnimation: ValueAnimator = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, colorTo)
+        colorAnimation.duration = 500
+        colorAnimation.addUpdateListener {
+            userLoginLine.backgroundTintList = ColorStateList.valueOf(it.animatedValue as Int)
+            userPasswordLine.backgroundTintList = ColorStateList.valueOf(it.animatedValue as Int)
+        }
+        colorAnimation.start()
+
+        incorrectMessage.startAnimation(animationMessageHide)
+        incorrectMessage.visibility = View.INVISIBLE
     }
 }

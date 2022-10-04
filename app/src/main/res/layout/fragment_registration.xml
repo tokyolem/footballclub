@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="ui.RegistrationFragment">
+    tools:context=".ui.registration.RegistrationFragment">
 
     <FrameLayout
         android:id="@+id/to_home_page_from_registration_page"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/ic_back"
@@ -23,37 +23,40 @@
 
     <EditText
         android:id="@+id/user_new_password"
-        android:layout_width="253dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="300dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="40dp"
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.513"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/user_new_email" />
 
     <EditText
         android:id="@+id/user_new_email"
-        android:layout_width="253dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="240dp"
+        android:layout_width="300dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="180dp"
         android:ems="10"
         android:hint="@string/e_mail"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/user_repeat_password"
-        android:layout_width="253dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="300dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="40dp"
         android:ems="10"
         android:hint="@string/repeat_password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.513"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/user_new_password" />
 

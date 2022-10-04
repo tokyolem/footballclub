@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scaleType="centerCrop"
-    tools:context="ui.AuthorizationFragment">
+    tools:context=".ui.authorization.AuthorizationFragment">
 
     <FrameLayout
         android:id="@+id/sign_in_button"
@@ -54,10 +54,11 @@
 
     <EditText
         android:id="@+id/user_login"
-        android:layout_width="253dp"
-        android:layout_height="52dp"
+        android:layout_width="300dp"
+        android:layout_height="54dp"
         android:layout_marginTop="256dp"
         android:ems="10"
+        android:backgroundTint="@color/AppBarColor"
         android:hint="@string/e_mail"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
@@ -66,20 +67,22 @@
 
     <EditText
         android:id="@+id/user_password"
-        android:layout_width="253dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="40dp"
+        android:layout_width="300dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="60dp"
+        android:backgroundTint="@color/AppBarColor"
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="@+id/reveal"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/user_login" />
 
     <FrameLayout
         android:id="@+id/to_home_page_from_authorization_page"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/ic_back"
@@ -90,5 +93,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center"
+        android:visibility="invisible"
+        android:text="@string/incorrect_message"
+        android:textColor="@color/incorrect_data"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/sign_in_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_password" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
