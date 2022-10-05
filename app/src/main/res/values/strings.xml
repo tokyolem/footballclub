@@ -10,5 +10,8 @@
     <string name="repeat_password">Повторите пароль</string>
     <string name="e_mail">Адрес электронной почты</string>
 
-    <string name="incorrect_message">Неправильный логин или пароль.\nПовторите попытку!</string>
+    <string name="incorrect_message">Неверный логин или пароль.\nПовторите попытку!</string>
+    <string name="empty_reg_lines">Заполните все требуемые поля</string>
+    <string name="passwords_reg_error">Пароли не совпадают!</string>
+    <string name="account_exist_error">Имя аккаунта уже занято!</string>
 </resources>
