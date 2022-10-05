@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.ftclub.footballclub.R
 import com.ftclub.footballclub.SignInActivity
 import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
+import com.ftclub.footballclub.ui.ViewsAnimation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -48,13 +49,6 @@ class RegistrationFragment : Fragment() {
         signUp()
     }
 
-    private fun navigation() {
-        val toSignInButton = requireActivity().findViewById<FrameLayout>(R.id.to_home_page_from_registration_page)
-        toSignInButton.setOnClickListener {
-            findNavController().navigate(R.id.action_registrationFragment_to_homeFragment)
-        }
-    }
-
     private fun signUp() {
         val signUpButton = requireActivity().findViewById<FrameLayout>(R.id.sign_up_button)
         signUpButton.setOnClickListener {
@@ -79,6 +73,15 @@ class RegistrationFragment : Fragment() {
         val userNewPassword = userNewPasswordLine.text.toString()
         val passwordRepeat = userPasswordRepeat.text.toString()
 
+
+        if (userNewEmail.isEmpty() || userNewPassword.isEmpty() || passwordRepeat.isEmpty()) {
+            registrationLinesEmptyAnimation()
+        } else {
+            if (userNewPassword != passwordRepeat) {
+                registrationPasswordsNotMatchAnimation()
+            }  else if (isAccountExist(userNewEmail)) {
+                accountExistAnimation()
+
         if (userNewPassword != passwordRepeat) {
             if (!isAnimationActive)
                 registrationPasswordsNotMatch()
@@ -88,6 +91,7 @@ class RegistrationFragment : Fragment() {
                     registrationLinesEmptyAnimation()
             } else if (isAccountExist(userNewEmail)) {
                 findNavController().navigate(R.id.action_registrationFragment_to_homeFragment)
+
             } else {
                 SignInActivity.accountsViewModel.insertAccount(
                     Accounts(userNewEmail, userNewPassword, false)
@@ -95,6 +99,7 @@ class RegistrationFragment : Fragment() {
             }
         }
     }
+
 
     private fun editTextLineAnimation(editTextLine: EditText) {
         val colorFrom: Int = resources.getColor(R.color.AppBarColor, resources.newTheme())
@@ -118,6 +123,28 @@ class RegistrationFragment : Fragment() {
         val incorrectMessage = requireActivity().findViewById<TextView>(R.id.message_registration)
 
         if (userNewEmailLine.text.isEmpty()) {
+
+            ViewsAnimation.propertyAnimationShow(userNewEmailLine, requireContext())
+            ViewsAnimation.propertyAnimationHide(userNewEmailLine, requireContext())
+            ViewsAnimation.messageHideAnimation(incorrectMessage, requireContext())
+        }
+        if (userNewPasswordLine.text.isEmpty()) {
+            ViewsAnimation.propertyAnimationShow(userNewPasswordLine, requireContext())
+            ViewsAnimation.propertyAnimationHide(userNewPasswordLine, requireContext())
+            ViewsAnimation.messageHideAnimation(incorrectMessage, requireContext())
+        }
+        if (userPasswordRepeat.text.isEmpty()) {
+            ViewsAnimation.propertyAnimationShow(userPasswordRepeat, requireContext())
+            ViewsAnimation.propertyAnimationHide(userPasswordRepeat, requireContext())
+            ViewsAnimation.messageHideAnimation(incorrectMessage, requireContext())
+        }
+        
+        incorrectMessage.setText(R.string.empty_reg_lines)
+        ViewsAnimation.messageShowAnimation(incorrectMessage, requireContext())
+    }
+
+    private fun registrationPasswordsNotMatchAnimation() {
+
             editTextLineAnimation(userNewEmailLine)
             propertyAnimationHide(userNewEmailLine)
             messageHideAnimation(incorrectMessage)
@@ -137,6 +164,7 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun registrationPasswordsNotMatch() {
+
         clearFocus()
 
         val userNewPasswordLine = requireActivity().findViewById<EditText>(R.id.user_new_password)
@@ -144,6 +172,32 @@ class RegistrationFragment : Fragment() {
         val incorrectMessage = requireActivity().findViewById<TextView>(R.id.message_registration)
 
         incorrectMessage.setText(R.string.passwords_reg_error)
+
+        ViewsAnimation.messageShowAnimation(incorrectMessage, requireContext())
+
+        ViewsAnimation.propertyAnimationShow(userNewPasswordLine, requireContext())
+        ViewsAnimation.propertyAnimationShow(userPasswordRepeat, requireContext())
+
+        ViewsAnimation.propertyAnimationHide(userNewPasswordLine, requireContext())
+        ViewsAnimation.propertyAnimationHide(userPasswordRepeat, requireContext())
+
+        ViewsAnimation.messageHideAnimation(incorrectMessage, requireContext())
+    }
+
+    private fun accountExistAnimation() {
+        clearFocus()
+
+        val userNewEmailLine = requireActivity().findViewById<EditText>(R.id.user_new_email)
+        val incorrectMessage = requireActivity().findViewById<TextView>(R.id.message_registration)
+
+        incorrectMessage.setText(R.string.account_exist_error)
+
+        ViewsAnimation.messageShowAnimation(incorrectMessage, requireContext())
+        ViewsAnimation.propertyAnimationShow(userNewEmailLine, requireContext())
+
+        ViewsAnimation.messageHideAnimation(incorrectMessage, requireContext())
+        ViewsAnimation.propertyAnimationHide(userNewEmailLine, requireContext())
+
         messageShowAnimation(incorrectMessage)
 
         editTextLineAnimation(userNewPasswordLine)
@@ -186,6 +240,7 @@ class RegistrationFragment : Fragment() {
         val animationMessageHide = AnimationUtils.loadAnimation(context, R.anim.alpha_message_begin)
         textView.startAnimation(animationMessageHide)
         textView.visibility = View.VISIBLE
+
     }
 
     private fun clearFocus() {
@@ -197,5 +252,14 @@ class RegistrationFragment : Fragment() {
         userNewPasswordLine.clearFocus()
         userPasswordRepeat.clearFocus()
     }
+
+
+    private fun navigation() {
+        val toSignInButton = requireActivity().findViewById<FrameLayout>(R.id.to_home_page_from_registration_page)
+        toSignInButton.setOnClickListener {
+            findNavController().navigate(R.id.action_registrationFragment_to_homeFragment)
+        }
+    }
+
 
 }

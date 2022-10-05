@@ -25,6 +25,7 @@ import androidx.navigation.fragment.findNavController
 import com.ftclub.footballclub.MainActivity
 import com.ftclub.footballclub.R
 import com.ftclub.footballclub.SignInActivity
+import com.ftclub.footballclub.ui.ViewsAnimation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -65,94 +66,7 @@ class AuthorizationFragment : Fragment() {
         }
     }
 
-    private fun fadeOutTextAndShowProgressDialog() {
-        val textSignIn = requireActivity().findViewById<TextView>(R.id.text_sign_in)
-
-        textSignIn.animate().alpha(0f)
-            .setDuration(250)
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    super.onAnimationEnd(animation)
-                    showProgressDialog()
-                }
-            }).start()
-    }
-
-    private fun animateButtonWidth() {
-        val signInButton = requireActivity().findViewById<FrameLayout>(R.id.sign_in_button)
-
-        val anim = ValueAnimator.ofInt(signInButton.measuredWidth, getFabWidth().toInt())
-        anim.addUpdateListener (ValueAnimator.AnimatorUpdateListener { animation ->
-            val value = animation!!.animatedValue as Int
-            val layoutParams: ViewGroup.LayoutParams = signInButton.layoutParams
-            layoutParams.width = value
-            signInButton.requestLayout()
-        })
-        anim.duration = 250
-        anim.start()
-    }
-
-    private fun showProgressDialog() {
-        val progressBarSignIn = requireActivity().findViewById<ProgressBar>(R.id.progress_bar_sign_in)
-        progressBarSignIn.alpha = 1f
-        progressBarSignIn
-            .indeterminateDrawable
-            .colorFilter =
-            BlendModeColorFilterCompat.createBlendModeColorFilterCompat(Color.parseColor("#ffffff"), BlendModeCompat.SRC_IN)
-        progressBarSignIn.visibility = View.VISIBLE
-    }
-
-    private fun revealButton() {
-        val signInButton = requireActivity().findViewById<FrameLayout>(R.id.sign_in_button)
-        val textSignIn = requireActivity().findViewById<TextView>(R.id.text_sign_in)
-        val revealView = requireActivity().findViewById<View>(R.id.reveal)
-
-        signInButton.elevation = 0f
-
-        revealView.visibility = View.VISIBLE
-
-        val cx = revealView.width
-        val cy = revealView.height
-
-        val x = (getFabWidth() / 2 + signInButton.x).toInt()
-        val y = (getFabWidth() / 2 + signInButton.y).toInt()
-
-        val finalRadius = max(cx, cy) * 1.2f
-
-        val reveal = ViewAnimationUtils
-            .createCircularReveal(revealView, x, y, getFabWidth(), finalRadius)
-
-        reveal.duration = 350
-        reveal.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
-                reset(animation)
-            }
-
-            private fun reset(animation: Animator?) {
-                super.onAnimationEnd(animation)
-                revealView.visibility = View.INVISIBLE
-                textSignIn.visibility = View.VISIBLE
-                textSignIn.alpha = 1f
-                signInButton.elevation = 4f
-                val layoutParams = signInButton.layoutParams
-                layoutParams.width = (resources.displayMetrics.density * 300).toInt()
-                signInButton.requestLayout()
-            }
-        })
-        reveal.start()
-    }
-
-    private fun fadeOutProgressDialog() {
-        val progressBarSignIn = requireActivity().findViewById<ProgressBar>(R.id.progress_bar_sign_in)
-
-        progressBarSignIn.animate().alpha(0f).setDuration(250).setListener(object : AnimatorListenerAdapter(){
-            override fun onAnimationEnd(animation: Animator?) {
-                super.onAnimationEnd(animation)
-            }
-        }).start()
-    }
-
-    private fun delayedStartNextActivity() {
+    private fun delayedStartAdministratorActivity() {
         val intent = Intent(context, MainActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         }
@@ -163,40 +77,36 @@ class AuthorizationFragment : Fragment() {
     }
 
     private fun nextActionWithActivityChange() {
+        val signInButton = requireActivity().findViewById<FrameLayout>(R.id.sign_in_button)
+        val textSignIn = requireActivity().findViewById<TextView>(R.id.text_sign_in)
+        val revealView = requireActivity().findViewById<View>(R.id.reveal)
+        val progressBarSignIn = requireActivity().findViewById<ProgressBar>(R.id.progress_bar_sign_in)
+
         userScope.launch {
             delay(2000)
             
             isViewsVisible(false)
             
-            revealButton()
-            fadeOutProgressDialog()
-            delayedStartNextActivity()
+            ViewsAnimation.revealButton(signInButton, textSignIn, revealView, requireContext())
+            ViewsAnimation.fadeOutProgressDialog(progressBarSignIn)
+
+            delayedStartAdministratorActivity()
         }
     }
 
     private fun nextActionWithoutActivityChange() {
+        val signInButton = requireActivity().findViewById<FrameLayout>(R.id.sign_in_button)
+        val textSignIn = requireActivity().findViewById<TextView>(R.id.text_sign_in)
+        val progressBarSignIn = requireActivity().findViewById<ProgressBar>(R.id.progress_bar_sign_in)
+
         userScope.launch {
             delay(2000)
             
-            fadeOutProgressDialog()
-            resetSignInButton()
+            ViewsAnimation.fadeOutProgressDialog(progressBarSignIn)
+            ViewsAnimation.resetButton(signInButton, textSignIn, requireContext())
             
             incorrectAuthorizationDataAnimation()
-            delay(2000)
-            propertyAnimationHide()
         }
-    }
-
-    private fun resetSignInButton() {
-        val signInButton = requireActivity().findViewById<FrameLayout>(R.id.sign_in_button)
-        val textSignIn = requireActivity().findViewById<TextView>(R.id.text_sign_in)
-
-        textSignIn.visibility = View.VISIBLE
-        textSignIn.alpha = 1f
-        signInButton.elevation = 4f
-        val layoutParams = signInButton.layoutParams
-        layoutParams.width = (resources.displayMetrics.density * 300).toInt()
-        signInButton.requestLayout()
     }
 
     private fun isViewsVisible(visibility: Boolean) {
@@ -210,11 +120,6 @@ class AuthorizationFragment : Fragment() {
             userLogin.visibility = View.INVISIBLE
             userPassword.visibility = View.INVISIBLE
         }
-    }
-
-    @SuppressLint("PrivateResource")
-    private fun getFabWidth(): Float {
-        return resources.getDimension(com.google.android.material.R.dimen.design_fab_size_normal)
     }
 
     private fun signIn() {
@@ -257,17 +162,14 @@ class AuthorizationFragment : Fragment() {
 
         if (isPasswordAndAccountEmailCorrect(accountLogin, accountPassword)) {
             if (isAdministratorAccount(accountLogin)) {
-                animateButtonWidth()
-                fadeOutTextAndShowProgressDialog()
+                authorizationProcessButtonAnimation()
                 nextActionWithActivityChange()
             } else {
-                animateButtonWidth()
-                fadeOutTextAndShowProgressDialog()
+                authorizationProcessButtonAnimation()
                 nextActionWithActivityChange()
             }
         } else {
-            animateButtonWidth()
-            fadeOutTextAndShowProgressDialog()
+            authorizationProcessButtonAnimation()
             nextActionWithoutActivityChange()
         }
     }
@@ -277,44 +179,23 @@ class AuthorizationFragment : Fragment() {
         val accountPasswordLine = requireActivity().findViewById<EditText>(R.id.user_password)
         val incorrectMessage = requireActivity().findViewById<TextView>(R.id.message)
 
-        val animationBegin = AnimationUtils.loadAnimation(context, R.anim.little_trans_begin)
-        val animationEnd = AnimationUtils.loadAnimation(context, R.anim.little_trans_end)
+        incorrectMessage.setText(R.string.incorrect_message)
 
+        ViewsAnimation.messageShowAnimation(incorrectMessage, requireContext())
+        ViewsAnimation.propertyAnimationShow(accountLoginLine, requireContext())
+        ViewsAnimation.propertyAnimationShow(accountPasswordLine, requireContext())
 
-        accountLoginLine.backgroundTintList =
-            ColorStateList.valueOf(resources.getColor(R.color.incorrect_data, resources.newTheme()))
-
-        accountPasswordLine.setText("")
-        accountPasswordLine.backgroundTintList =
-            ColorStateList.valueOf(resources.getColor(R.color.incorrect_data, resources.newTheme()))
-
-        incorrectMessage.visibility = View.VISIBLE
-        
-        accountLoginLine.startAnimation(animationBegin)
-        accountLoginLine.startAnimation(animationEnd)
-        accountPasswordLine.startAnimation(animationBegin)
-        accountPasswordLine.startAnimation(animationEnd)
+        ViewsAnimation.messageHideAnimation(incorrectMessage, requireContext())
+        ViewsAnimation.propertyAnimationHide(accountLoginLine, requireContext())
+        ViewsAnimation.propertyAnimationHide(accountPasswordLine, requireContext())
     }
 
-    private fun propertyAnimationHide() {
-        val userLoginLine = requireActivity().findViewById<EditText>(R.id.user_login)
-        val userPasswordLine = requireActivity().findViewById<EditText>(R.id.user_password)
-        val incorrectMessage = requireActivity().findViewById<TextView>(R.id.message)
+    private fun authorizationProcessButtonAnimation() {
+        val signInButton = requireActivity().findViewById<FrameLayout>(R.id.sign_in_button)
+        val textSignIn = requireActivity().findViewById<TextView>(R.id.text_sign_in)
+        val progressBarSignIn = requireActivity().findViewById<ProgressBar>(R.id.progress_bar_sign_in)
 
-        val animationMessageHide = AnimationUtils.loadAnimation(context, R.anim.alpha_message)
-
-        val colorTo: Int = resources.getColor(R.color.AppBarColor, resources.newTheme())
-        val colorFrom: Int = resources.getColor(R.color.incorrect_data, resources.newTheme())
-
-        val colorAnimation: ValueAnimator = ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, colorTo)
-        colorAnimation.duration = 500
-        colorAnimation.addUpdateListener {
-            userLoginLine.backgroundTintList = ColorStateList.valueOf(it.animatedValue as Int)
-            userPasswordLine.backgroundTintList = ColorStateList.valueOf(it.animatedValue as Int)
-        }
-        colorAnimation.start()
-
-        incorrectMessage.startAnimation(animationMessageHide)
-        incorrectMessage.visibility = View.INVISIBLE
+        ViewsAnimation.animateButtonWidth(signInButton, requireContext())
+        ViewsAnimation.fadeOutTextAndShowProgressDialog(textSignIn, progressBarSignIn)
     }
 }
