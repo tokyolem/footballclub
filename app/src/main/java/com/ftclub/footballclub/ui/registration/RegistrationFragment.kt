@@ -25,9 +25,7 @@ import kotlinx.coroutines.launch
 class RegistrationFragment : Fragment() {
 
     private val userScope = CoroutineScope(Dispatchers.Main)
-
-    private var isAnimationActive = false
-
+    
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
