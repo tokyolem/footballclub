@@ -40,6 +40,7 @@ class AdministratorActivity: AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         burgerButtonAction()
+        signOutFromAccount()
     }
 
     private fun burgerButtonAction() {
@@ -47,6 +48,12 @@ class AdministratorActivity: AppCompatActivity() {
 
         burgerButton.setOnClickListener {
             binding.drawerLayoutAdmin.openDrawer(binding.navViewAdmin, true)
+        }
+    }
+
+    private fun signOutFromAccount() {
+        findViewById<FrameLayout>(R.id.log_out).setOnClickListener {
+            finish()
         }
     }
 }
