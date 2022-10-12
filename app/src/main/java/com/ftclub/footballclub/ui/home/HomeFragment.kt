@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.ftclub.footballclub.R
 import com.ftclub.footballclub.SignInActivity
+import com.ftclub.footballclub.basic.DateTime
 import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
 import com.ftclub.footballclub.basic.room.accounts.viewModel.AccountsViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -67,7 +68,13 @@ class HomeFragment : Fragment() {
 
     private fun createDefaultAdminAccountIfNotExist() {
         if (accountsList!!.isEmpty()) {
-            SignInActivity.accountsViewModel.insertAccount(Accounts("admin", "admin", true))
+            SignInActivity.accountsViewModel.insertAccount(
+                Accounts(
+                    "admin", "admin", true, DateTime.getFormatDateTime(),
+                    "admin", "admin", "admin",
+                    "admin", "admin", "admin"
+                )
+            )
         } else {
             return
         }
