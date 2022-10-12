@@ -1,6 +1,7 @@
 package com.ftclub.footballclub.ui.registration
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,14 +9,18 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.ftclub.footballclub.R
 import com.ftclub.footballclub.SignInActivity
+import com.ftclub.footballclub.basic.DateTime
 import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
 import com.ftclub.footballclub.ui.ViewsAnimation
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Date
 
 /**
  * A simple [Fragment] subclass.
@@ -25,8 +30,12 @@ import kotlinx.coroutines.launch
 class RegistrationFragment : Fragment() {
 
     private val userScope = CoroutineScope(Dispatchers.Main)
+    private lateinit var bundle: Bundle
 
-    private var isAnimationActive = false
+    private val EMAIL_KEY = "email_key"
+    private val PASSWORD_KEY = "password_key"
+
+    private val informationFragment = InformationFragment()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,6 +43,8 @@ class RegistrationFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_registration, container, false)
+
+        bundle = Bundle()
 
         return view
     }
@@ -45,7 +56,7 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun signUp() {
-        val signUpButton = requireActivity().findViewById<FrameLayout>(R.id.sign_up_button)
+        val signUpButton = requireActivity().findViewById<FloatingActionButton>(R.id.sign_up_button)
         signUpButton.setOnClickListener {
             userScope.launch {
                 putAccountToDatabase()
@@ -59,7 +70,7 @@ class RegistrationFragment : Fragment() {
         return accountEmails.isNotEmpty()
     }
 
-    private suspend fun putAccountToDatabase () {
+    private suspend fun putAccountToDatabase() {
         val userNewEmailLine = requireActivity().findViewById<EditText>(R.id.user_new_email)
         val userNewPasswordLine = requireActivity().findViewById<EditText>(R.id.user_new_password)
         val userPasswordRepeat = requireActivity().findViewById<EditText>(R.id.user_repeat_password)
@@ -73,12 +84,15 @@ class RegistrationFragment : Fragment() {
         } else {
             if (userNewPassword != passwordRepeat) {
                 registrationPasswordsNotMatchAnimation()
-            }  else if (isAccountExist(userNewEmail)) {
+            } else if (isAccountExist(userNewEmail)) {
                 accountExistAnimation()
             } else {
-                SignInActivity.accountsViewModel.insertAccount(
-                    Accounts(userNewEmail, userNewPassword, false)
-                )
+                val toInformationFragment = arrayOf(userNewEmail, userNewPassword)
+                val action =
+                    RegistrationFragmentDirections.actionRegistrationFragmentToInformationFragment(
+                        toInformationFragment
+                    )
+                findNavController().navigate(action)
             }
         }
     }
@@ -156,7 +170,8 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun navigation() {
-        val toSignInButton = requireActivity().findViewById<FrameLayout>(R.id.to_home_page_from_registration_page)
+        val toSignInButton =
+            requireActivity().findViewById<FrameLayout>(R.id.to_home_page_from_registration_page)
         toSignInButton.setOnClickListener {
             findNavController().navigate(R.id.action_registrationFragment_to_homeFragment)
         }

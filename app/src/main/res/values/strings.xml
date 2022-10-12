@@ -14,4 +14,24 @@
     <string name="empty_reg_lines">Заполните все требуемые поля</string>
     <string name="passwords_reg_error">Пароли не совпадают!</string>
     <string name="account_exist_error">Имя аккаунта уже занято!</string>
+    <string name="reg_information">Email адрес и пароль</string>
+    <string name="reg_information_2">Убедитесь, что вводите корректный email адрес\nи надёжный пароль.</string>
+
+    <string name="own_about">О себе (необязательно)</string>
+    <string name="own_about_information">Расскажите о себе \nи выберите позицию на поле.</string>
+    <string name="age">Установите дату рождения</string>
+
+    <string name="select_item">Выберите позицию</string>
+
+    <string-array name="positions">
+        <item>Нападающий</item>
+        <item>Защитник</item>
+        <item>Полузащитник</item>
+        <item>Вратарь</item>
+    </string-array>
+
+    <string name="first_name">Имя</string>
+    <string name="last_name">Фамилия</string>
+    <string name="phone_number">Номер телефона</string>
+
 </resources>

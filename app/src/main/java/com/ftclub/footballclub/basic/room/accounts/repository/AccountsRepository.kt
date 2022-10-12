@@ -16,6 +16,9 @@ class AccountsRepository(private val accountsDao: AccountsDao) {
     suspend fun getAccountsIds(id: Long): List<Accounts> =
         accountsDao.getAccountsIds(id)
 
+    suspend fun getDateTimeByEmail(accountEmail: String): List<Accounts> =
+        accountsDao.getDateTimeByEmail(accountEmail)
+
     suspend fun insertAccount(account: Accounts) {
         accountsDao.insertAccount(account)
     }

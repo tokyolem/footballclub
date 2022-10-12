@@ -22,6 +22,7 @@ import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.ftclub.footballclub.AdministratorActivity
 import com.ftclub.footballclub.MainActivity
 import com.ftclub.footballclub.R
 import com.ftclub.footballclub.SignInActivity
@@ -67,7 +68,7 @@ class AuthorizationFragment : Fragment() {
     }
 
     private fun delayedStartAdministratorActivity() {
-        val intent = Intent(context, MainActivity::class.java).apply {
+        val intent = Intent(context, AdministratorActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
         }
         CoroutineScope(Dispatchers.Main).launch {

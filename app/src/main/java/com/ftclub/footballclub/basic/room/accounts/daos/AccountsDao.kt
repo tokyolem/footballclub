@@ -22,6 +22,9 @@ interface AccountsDao {
     @Query("SELECT * FROM ${AccountsDatabase.ACCOUNTS_TABLE_NAME} WHERE id = :id")
     suspend fun getAccountsIds(id: Long): List<Accounts>
 
+    @Query("SELECT * FROM ${AccountsDatabase.ACCOUNTS_TABLE_NAME} WHERE account_email = :accountEmail")
+    suspend fun getDateTimeByEmail(accountEmail: String): List<Accounts>
+
     @Insert
     suspend fun insertAccount(account: Accounts)
 }

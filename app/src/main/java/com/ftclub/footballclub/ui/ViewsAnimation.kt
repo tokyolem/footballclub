@@ -8,6 +8,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.util.Log
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
@@ -45,14 +46,15 @@ object ViewsAnimation {
     }
 
     fun propertyAnimationShow(editTextLine: EditText, context: Context) {
-        val colorFrom: Int = context.resources.getColor(R.color.AppBarColor, context.resources.newTheme())
+
+        val colorFrom = 1627389952
         val colorTo: Int = context.resources.getColor(R.color.incorrect_data, context.resources.newTheme())
 
         val colorAnimation: ValueAnimator =
             ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, colorTo)
         colorAnimation.duration = 150
         colorAnimation.addUpdateListener {
-            editTextLine.backgroundTintList = ColorStateList.valueOf(it.animatedValue as Int)
+            editTextLine.setHintTextColor(ColorStateList.valueOf(it.animatedValue as Int))
         }
         colorAnimation.start()
     }
@@ -61,14 +63,14 @@ object ViewsAnimation {
         userScope.launch {
             delay(2000)
 
-            val colorTo: Int = context.resources.getColor(R.color.AppBarColor, context.resources.newTheme())
+            val colorTo = 1627389952
             val colorFrom: Int = context.resources.getColor(R.color.incorrect_data, context.resources.newTheme())
 
             val colorAnimation: ValueAnimator =
                 ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, colorTo)
             colorAnimation.duration = 500
             colorAnimation.addUpdateListener {
-                editTextLine.backgroundTintList = ColorStateList.valueOf(it.animatedValue as Int)
+                editTextLine.setHintTextColor(ColorStateList.valueOf(it.animatedValue as Int))
             }
             colorAnimation.start()
         }

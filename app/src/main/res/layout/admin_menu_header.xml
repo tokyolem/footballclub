@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:background="@color/menu_header_color"
+    android:paddingLeft="15dp">
+
+    <TextView
+        android:id="@+id/slogan_menu_admin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Аккаунт?"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp" />
+
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Футбольный клуб"
+        android:textSize="24sp"
+        android:layout_above="@+id/slogan_menu_admin"
+        android:textColor="@color/black"/>
+    
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_ball"
+        android:layout_above="@+id/app_name"/>
+
+
+
+</RelativeLayout>
