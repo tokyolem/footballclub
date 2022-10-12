@@ -13,7 +13,7 @@
         <!-- Status bar color. -->
         <!-- Customize your theme here. -->
         <item name="android:actionBarStyle">@style/AppBarStyle</item>
-        <item name="android:statusBarColor">@color/AppBarColor</item>
+        <item name="android:statusBarColor">@color/light_white</item>
     </style>
 
     <style name="AppBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar">
@@ -28,5 +28,59 @@
 
     <style name="Theme.LawsRB.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="elevation">0dp</item>
+    </style>
+
+    <style name="Theme.LawsRB.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+    </style>
+
+    <style name="Theme.LawsRB.CardView.Title" parent="Widget.MaterialComponents.TextView">
+        <item name="android:text">@string/e_mail</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Theme.ftclub.CardView" parent="Widget.MaterialComponents.CardView">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:textSize">20sp</item>
+
+    </style>
+
+    <style name="Theme.ftclub.CardView.Accounts" parent="Theme.ftclub.CardView">
+        <item name="cardBackgroundColor">@android:color/white</item>
+        <item name="cardElevation">7dp</item>
+        <item name="cardCornerRadius">0dp</item>
+    </style>
+
+    <style name="Theme.LawsRB.TabLayout.Light" parent="Theme.MaterialComponents.DayNight">
+        <item name="android:background">@color/white</item>
+        <item name="tabTextColor">@color/white</item>
+        <item name="tabSelectedTextColor">?attr/colorOnPrimary</item>
+        <item name="tabIndicatorColor">?attr/colorOnPrimary</item>
+        <item name="tabIndicatorHeight">4dp</item>
+        <item name="tabIndicatorFullWidth">false</item>
+    </style>
+
+    <style name="Theme.FootballClub.EditTextStyle" parent="Theme.FootballClub">
+
+        <item name="android:strokeAlpha">1.0</item>
+
+    </style>
+
+    <style name="Theme.FootballClub.Admin" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/light_white</item>
+
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <!-- Customize your theme here. -->
+        <item name="android:actionBarStyle">@style/AppBarStyle</item>
+        <item name="android:statusBarColor">@color/light_white</item>
+        <item name="android:windowBackground">@color/window_background</item>
     </style>
 </resources>
