@@ -23,9 +23,13 @@
 
     <EditText
         android:id="@+id/user_new_password"
+        android:background="@drawable/custom_input"
         android:layout_width="300dp"
         android:layout_height="54dp"
         android:layout_marginTop="40dp"
+        android:drawablePadding="12dp"
+        android:paddingEnd="12dp"
+        android:paddingStart="12dp"
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
@@ -38,10 +42,14 @@
         android:id="@+id/user_new_email"
         android:layout_width="300dp"
         android:layout_height="54dp"
-        android:layout_marginTop="180dp"
+        android:layout_marginTop="220dp"
+        android:background="@drawable/custom_input"
+        android:drawablePadding="12dp"
         android:ems="10"
         android:hint="@string/e_mail"
         android:inputType="textEmailAddress"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,9 +57,13 @@
 
     <EditText
         android:id="@+id/user_repeat_password"
+        android:background="@drawable/custom_input"
         android:layout_width="300dp"
         android:layout_height="54dp"
         android:layout_marginTop="40dp"
+        android:drawablePadding="12dp"
+        android:paddingEnd="12dp"
+        android:paddingStart="12dp"
         android:ems="10"
         android:hint="@string/repeat_password"
         android:inputType="textPassword"
@@ -60,45 +72,58 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/user_new_password" />
 
-    <FrameLayout
-        android:id="@+id/sign_up_button"
-        android:layout_width="300dp"
-        android:layout_height="56dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="120dp"
-        android:background="@drawable/sign_in_button"
-        android:clickable="true"
-        android:elevation="4dp"
-        android:focusable="true"
-        android:foreground="?selectableItemBackground"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <TextView
-            android:id="@+id/text_sign_un"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="sans-serif-light"
-            android:text="Зарегистрироваться"
-            android:textColor="@color/white"
-            android:textSize="24sp" />
-    </FrameLayout>
-
     <TextView
         android:id="@+id/message_registration"
         android:layout_width="295dp"
         android:layout_height="45dp"
+        android:layout_marginTop="50dp"
         android:fontFamily="sans-serif-light"
         android:gravity="center"
         android:textColor="@color/incorrect_data"
         android:textSize="18sp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/sign_up_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/user_repeat_password" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/sign_up_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:borderWidth="0dp"
+        android:elevation="10dp"
+        android:src="@drawable/ic_baseline_navigate_next_24"
+        android:backgroundTint="@color/background_about_app"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/reg_information"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/reg_information"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toTopOf="@+id/user_new_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/reg_information_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="35dp"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center"
+        android:text="@string/reg_information_2"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/user_new_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reg_information" />
 </androidx.constraintlayout.widget.ConstraintLayout>

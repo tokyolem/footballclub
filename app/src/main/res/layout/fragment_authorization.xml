@@ -54,11 +54,14 @@
 
     <EditText
         android:id="@+id/user_login"
+        android:background="@drawable/custom_input"
         android:layout_width="300dp"
         android:layout_height="54dp"
         android:layout_marginTop="256dp"
+        android:drawablePadding="12dp"
+        android:paddingEnd="12dp"
+        android:paddingStart="12dp"
         android:ems="10"
-        android:backgroundTint="@color/AppBarColor"
         android:hint="@string/e_mail"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,10 +70,13 @@
 
     <EditText
         android:id="@+id/user_password"
+        android:background="@drawable/custom_input"
         android:layout_width="300dp"
         android:layout_height="54dp"
         android:layout_marginTop="60dp"
-        android:backgroundTint="@color/AppBarColor"
+        android:drawablePadding="12dp"
+        android:paddingEnd="12dp"
+        android:paddingStart="12dp"
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"

@@ -4,22 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ftclub.footballclub.SignInActivity">
+    tools:context="com.ftclub.footballclub.AdministratorActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/AppBarColor"
+        android:background="@color/light_white"
         android:theme="@style/Theme.LawsRB.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/AppBarColor"
+            android:background="@color/light_white"
+            app:popupTheme="@style/Theme.LawsRB.PopupOverlay"
             app:layout_scrollFlags="scroll|snap|enterAlways"/>
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <include layout="@layout/content_admin" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
