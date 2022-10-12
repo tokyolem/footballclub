@@ -32,6 +32,14 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity
+            android:name=".AdministratorActivity"
+            android:exported="true"
+            android:theme="@style/Theme.FootballClub.Admin">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
     </application>
 
 </manifest>
