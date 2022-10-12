@@ -17,7 +17,7 @@ class AccountsViewModel(application: Application): AndroidViewModel(application)
     private val userScope = CoroutineScope(Dispatchers.IO)
 
     private val accountsRepository: AccountsRepository
-    private val accounts: LiveData<List<Accounts>>
+    val accounts: LiveData<List<Accounts>>
 
     init {
         val accountsDao = AccountsDatabase.getDatabase(application).accountsDao()
@@ -38,6 +38,11 @@ class AccountsViewModel(application: Application): AndroidViewModel(application)
     suspend fun getAccountsIds(id: Long): List<Accounts> =
         userScope.async {
             return@async accountsRepository.getAccountsIds(id)
+        }.await()
+
+    suspend fun getDateTimeByEmail(accountEmail: String): List<Accounts> =
+        userScope.async {
+            return@async accountsRepository.getDateTimeByEmail(accountEmail)
         }.await()
 
     fun insertAccount(account: Accounts) {

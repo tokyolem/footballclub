@@ -21,13 +21,16 @@ abstract class AccountsDatabase: RoomDatabase() {
 
         fun getDatabase(context: Context): AccountsDatabase {
             val tempInstance = INSTANCE
+
             if (tempInstance != null) return tempInstance
+
             synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     AccountsDatabase::class.java,
                     ACCOUNTS_DATABASE_NAME
                 ).build()
+
                 INSTANCE = instance
                 return instance
             }
