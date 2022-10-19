@@ -8,11 +8,13 @@
 
     <FrameLayout
         android:id="@+id/to_authorization_page"
-        android:layout_width="300dp"
-        android:layout_height="56dp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="244dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="496dp"
         android:background="@drawable/sign_in_button"
         android:clickable="true"
         android:elevation="4dp"
@@ -20,7 +22,7 @@
         android:foreground="?selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
@@ -37,10 +39,12 @@
 
     <FrameLayout
         android:id="@+id/to_registration_page"
-        android:layout_width="300dp"
-        android:layout_height="56dp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         android:layout_marginBottom="96dp"
         android:layout_weight="1"
         android:background="@drawable/sign_in_button"
@@ -50,9 +54,10 @@
         android:foreground="?selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.486"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/to_authorization_page">
+        app:layout_constraintTop_toBottomOf="@+id/to_authorization_page"
+        app:layout_constraintVertical_bias="0.143">
 
         <TextView
             android:id="@+id/text_registration_button"
@@ -67,16 +72,68 @@
 
     <TextView
         android:id="@+id/text_information"
-        android:layout_width="371dp"
-        android:layout_height="89dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"
-        android:gravity="center"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:gravity="start"
+        android:textStyle="bold"
         android:text="@string/home_message"
-        android:textSize="20sp"
+        android:textSize="28sp"
         app:layout_constraintBottom_toTopOf="@+id/to_authorization_page"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.155" />
+
+    <TextView
+        android:id="@+id/or"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/or"
+        app:layout_constraintBottom_toTopOf="@+id/to_registration_page"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/to_authorization_page" />
+
+    <FrameLayout
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_vector"
+        app:layout_constraintBottom_toTopOf="@+id/to_registration_page"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/or"
+        app:layout_constraintTop_toBottomOf="@+id/to_authorization_page">
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_vector"
+        app:layout_constraintBottom_toTopOf="@+id/to_registration_page"
+        app:layout_constraintEnd_toStartOf="@+id/or"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/to_authorization_page">
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/home_message_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="0dp"
+        android:text="@string/home_message_2"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/to_authorization_page"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_information"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

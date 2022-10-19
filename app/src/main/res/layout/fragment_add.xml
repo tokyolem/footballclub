@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.add.AddFragment">
+
+    <TextView
+        android:id="@+id/add_message_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:gravity="start"
+        android:text="@string/add_new_account"
+        android:textStyle="bold"
+        android:textSize="26sp"/>
+    <TextView
+        android:id="@+id/add_message_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:gravity="start"
+        android:text="@string/account_add_message"
+        android:textSize="16sp"/>
+
+    <EditText
+        android:id="@+id/add_new_email"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="350dp"
+        android:visibility="gone"
+        android:hint="@string/e_mail"/>
+
+    <EditText
+        android:id="@+id/add_new_password"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="200dp"
+        android:visibility="gone"
+        android:hint="@string/password"/>
+
+    <EditText
+        android:id="@+id/add_repeat_password"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="50dp"
+        android:visibility="gone"
+        android:hint="@string/repeat_password"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/to_next_action_add_reg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        app:layout_anchor="@id/bottom_sheet_add"
+        app:layout_anchorGravity="top|end"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="24dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:borderWidth="0dp"
+        android:src="@drawable/ic_baseline_navigate_next_24"
+        android:backgroundTint="@color/background_about_app"
+        android:elevation="10dp" />
+
+    <FrameLayout
+        android:id="@+id/add_new_account_half"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/sign_in_button"
+        android:clickable="true"
+        android:elevation="4dp"
+        android:focusable="true"
+        android:foreground="?selectableItemBackground"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="320dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/text_add_new_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/add"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/bottom_sheet_add"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+        android:layout_width="match_parent"
+        android:background="@drawable/rounded"
+        android:layout_height="300dp"
+        app:layout_insetEdge="bottom">
+
+        <FrameLayout
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_vector"
+            android:layout_gravity="end"
+            android:layout_marginEnd="30dp"
+            android:layout_marginTop="130dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:text="@string/or"
+            android:layout_marginTop="120dp"/>
+
+        <FrameLayout
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_vector"
+            android:layout_marginStart="30dp"
+            android:layout_gravity="start"
+            android:layout_marginTop="130dp"/>
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_remove_24"
+            android:layout_gravity="center|top"/>
+
+        <FrameLayout
+            android:id="@+id/add_half_account"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/sign_in_button"
+            android:clickable="true"
+            android:elevation="4dp"
+            android:focusable="true"
+            android:foreground="?selectableItemBackground"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="60dp">
+
+            <TextView
+                android:id="@+id/text_add_half_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/half_account"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/add_full_account"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/sign_in_button"
+            android:clickable="true"
+            android:elevation="4dp"
+            android:focusable="true"
+            android:foreground="?selectableItemBackground"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="160dp">
+
+            <TextView
+                android:id="@+id/text_add_full_account"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/full_account"
+                android:textColor="@color/white"
+                android:textSize="24sp" />
+
+        </FrameLayout>
+
+    </FrameLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
