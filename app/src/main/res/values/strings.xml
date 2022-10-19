@@ -2,13 +2,23 @@
     <string name="app_name">FootballClub</string>
 
     <string name="sign_in">Войти</string>
+    <string name="continue_action">Продолжить</string>
     <string name="sign_up">Зарегистрироваться</string>
+    <string name="authorization">Авторизация</string>
 
-    <string name="home_message">Пройдите авторизацию\n\nЛибо зарегистрируйте новый аккаунт</string>
+    <string name="home_message">Авторизируйтесь</string>
+    <string name="home_message_2">или пройдите регистрацию.</string>
 
     <string name="password">Пароль</string>
     <string name="repeat_password">Повторите пароль</string>
     <string name="e_mail">Адрес электронной почты</string>
+    <string name="remember_me">Запомнить меня.</string>
+    <string name="forget_password">Забыли пароль?</string>
+
+    <string name="accounts">Аккаунты</string>
+    <string name="about_app">Справка</string>
+    <string name="players">Игроки</string>
+    <string name="add_account">Добавить</string>
 
     <string name="incorrect_message">Неверный логин или пароль.\nПовторите попытку!</string>
     <string name="empty_reg_lines">Заполните все требуемые поля</string>
@@ -17,11 +27,14 @@
     <string name="reg_information">Email адрес и пароль</string>
     <string name="reg_information_2">Убедитесь, что вводите корректный email адрес\nи надёжный пароль.</string>
 
-    <string name="own_about">О себе (необязательно)</string>
-    <string name="own_about_information">Расскажите о себе \nи выберите позицию на поле.</string>
-    <string name="age">Установите дату рождения</string>
+    <string name="search">Поиск</string>
 
-    <string name="select_item">Выберите позицию</string>
+    <string name="own_about">О себе (необязательно)</string>
+    <string name="own_about_information">Расскажите о себе</string>
+    <string name="own_select_pos">и выберите позицию на поле.</string>
+    <string name="age">Укажите дату рождения</string>
+
+    <string name="select_item">Выберите позицию на поле</string>
 
     <string-array name="positions">
         <item>Нападающий</item>
@@ -33,5 +46,22 @@
     <string name="first_name">Имя</string>
     <string name="last_name">Фамилия</string>
     <string name="phone_number">Номер телефона</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="or">или</string>
+    <string name="reg_date">Дата регистрации:</string>
+    <string name="save_changes">Сохранить</string>
+    <string name="cancel_changes">Отмена</string>
+    <string name="ban">Заблокировать</string>
+    <string name="add_new_account">Добавьте новый аккаунт</string>
+    <string name="account_add_message">В вспылвающем диалоговом окне выберите варинат добавления.</string>
+    <string name="full_account">Подробное добавление</string>
+    <string name="half_account">Частичное добавление</string>
+    <string name="add">Добавить аккаунт</string>
+    <string name="add_inf_msg">Добавьте информацию о пользователе</string>
+    <string name="delete_message">Вы точно хотите удалить аккаунт?\nТакже удалятся данные игрока.</string>
+    <string name="delete_title">Удаление аккаунта</string>
+    <string name="full_information">Читать полностью…</string>
+    <string name="remove">Удалить</string>
 
 </resources>
