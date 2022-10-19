@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_accounts"
+        android:icon="@drawable/ic_user"
+        android:title="@string/accounts"/>
+
+    <item
+        android:id="@+id/navigation_players"
+        android:icon="@drawable/ic_player"
+        android:title="@string/players"/>
+
+    <item
+        android:id="@+id/navigation_add"
+        android:icon="@drawable/ic_add_account"
+        android:title="@string/add_account"/>
+
+    <item
+        android:id="@+id/navigation_about_app"
+        android:icon="@drawable/ic_about_app"
+        android:title="@string/about_app"/>
+
+</menu>
