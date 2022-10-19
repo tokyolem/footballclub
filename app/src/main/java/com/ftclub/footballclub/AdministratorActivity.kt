@@ -1,20 +1,15 @@
 package com.ftclub.footballclub
 
 import android.os.Bundle
-import android.view.Menu
-import android.widget.FrameLayout
-import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.ftclub.footballclub.databinding.ActivityAdministratorBinding
-import com.google.android.material.navigation.NavigationView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
-
-class AdministratorActivity: AppCompatActivity() {
+class AdministratorActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAdministratorBinding
 
@@ -26,34 +21,34 @@ class AdministratorActivity: AppCompatActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
-        val navController = findNavController(R.id.nav_host_fragment_admin_main)
-        val navView = binding.navViewAdmin
-        val drawerLayout = binding.drawerLayoutAdmin
+        supportActionBar!!.hide()
 
+        val navView: BottomNavigationView = binding.navView
+
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.accountsFragment, R.id.userSettingsFragment
-            ), drawerLayout
+                R.id.navigation_accounts,
+                R.id.navigation_players,
+                R.id.navigation_add,
+                R.id.navigation_about_app
+            )
         )
-
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
-        burgerButtonAction()
-        signOutFromAccount()
     }
 
-    private fun burgerButtonAction() {
-        val burgerButton = findViewById<FrameLayout>(R.id.burger_button)
+/*private fun burgerButtonAction() {
+    val burgerButton = findViewById<FrameLayout>(R.id.burger_button)
 
-        burgerButton.setOnClickListener {
-            binding.drawerLayoutAdmin.openDrawer(binding.navViewAdmin, true)
-        }
+    burgerButton.setOnClickListener {
+        binding.drawerLayoutAdmin.openDrawer(binding.navViewAdmin, true)
     }
+}*/
 
-    private fun signOutFromAccount() {
-        findViewById<FrameLayout>(R.id.log_out).setOnClickListener {
-            finish()
-        }
-    }
+/*<include
+android:id="@+id/app_bar_main"
+layout="@layout/app_bar_content"
+android:layout_width="match_parent"
+android:layout_height="match_parent" />*/
 }
