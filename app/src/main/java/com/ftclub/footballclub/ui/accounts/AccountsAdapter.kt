@@ -1,37 +1,50 @@
 package com.ftclub.footballclub.ui.accounts
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import androidx.viewbinding.ViewBinding
 import com.ftclub.footballclub.R
 import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
+import com.ftclub.footballclub.ui.BaseViewHolder
+import com.ftclub.footballclub.ui.ItemFingerprint
+import com.google.android.material.card.MaterialCardView
 
-class AccountsAdapter(private val accountsList: List<Accounts> ) :
-    RecyclerView.Adapter<AccountsAdapter.AccountsViewHolder>() {
+class AccountsAdapter(
+    private val accounts: List<ItemFingerprint<*, *>>,
+) : RecyclerView.Adapter<BaseViewHolder<ViewBinding, Accounts>>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountsViewHolder {
+    private var items = emptyList<Accounts>()
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): BaseViewHolder<ViewBinding, Accounts> {
         val inflater = LayoutInflater.from(parent.context)
-        val accountsCardView = inflater.inflate(R.layout.accounts_card, parent, false)
-
-        return AccountsViewHolder(accountsCardView)
+        return accounts.find { it.getLayoutId() == viewType }
+            ?.getViewHolder(inflater,parent)
+            ?.let { it as BaseViewHolder<ViewBinding, Accounts> }
+            ?: throw java.lang.IllegalArgumentException("View type not found: $viewType")
     }
 
-    override fun onBindViewHolder(holder: AccountsViewHolder, position: Int) {
-        val accounts: Accounts = accountsList[position]
-        setUpAccountsView(accounts, holder)
+    override fun onBindViewHolder(holder: BaseViewHolder<ViewBinding, Accounts>, position: Int) {
+        holder.onBind(items[position])
     }
 
-    override fun getItemCount(): Int = accountsList.size
+    override fun getItemCount() = items.size
 
-    private fun setUpAccountsView(accounts: Accounts, viewHolder: AccountsViewHolder) {
-        viewHolder.accountsCardView.findViewById<TextView>(R.id.account_card_title).text =
-            accounts.accountEmail
-        viewHolder.accountsCardView.findViewById<TextView>(R.id.date_time).text =
-            accounts.dateTime
+    override fun getItemViewType(position: Int): Int {
+        val item = items[position]
+        return accounts.find { it.isRelativeItem(item) }
+            ?.getLayoutId()
+            ?: throw java.lang.IllegalArgumentException("View type not found: $item")
     }
 
-    class AccountsViewHolder(val accountsCardView: View) : ViewHolder(accountsCardView)
+    fun setData(accounts: List<Accounts>) {
+        this.items = accounts
+        items.reversed()
+        notifyDataSetChanged()
+    }
 }
+
+
