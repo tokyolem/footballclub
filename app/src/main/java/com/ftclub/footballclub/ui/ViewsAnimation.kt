@@ -8,6 +8,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.ViewAnimationUtils
@@ -17,6 +19,7 @@ import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import com.ftclub.footballclub.R
@@ -37,18 +40,67 @@ object ViewsAnimation {
     }
 
     fun messageHideAnimation(textView: TextView, context: Context) {
-        userScope.launch {
-            delay(2000)
-            val animationMessageHide = AnimationUtils.loadAnimation(context, R.anim.alpha_message_end)
+        Handler(Looper.getMainLooper()).postDelayed({
+            val animationMessageHide =
+                AnimationUtils.loadAnimation(context, R.anim.alpha_message_end)
             textView.startAnimation(animationMessageHide)
             textView.visibility = View.INVISIBLE
-        }
+        }, 2000)
+    }
+
+    fun viewShowAnimation(view: View, context: Context) {
+        val animation = AnimationUtils.loadAnimation(context, R.anim.alpha_message_begin)
+        view.startAnimation(animation)
+        view.visibility = View.VISIBLE
+    }
+
+    fun viewHideAnimation(view: View, context: Context) {
+        val animation = AnimationUtils.loadAnimation(context, R.anim.alpha_message_end)
+        view.startAnimation(animation)
+        view.visibility = View.GONE
+    }
+
+    fun viewScaleUp(view: View, context: Context) {
+        val animation = AnimationUtils.loadAnimation(context, R.anim.scale_up)
+        view.startAnimation(animation)
+        view.visibility = View.VISIBLE
+    }
+
+    fun viewScaleDown(view: View, context: Context) {
+        val animation = AnimationUtils.loadAnimation(context, R.anim.scale_down)
+        view.startAnimation(animation)
+        view.visibility = View.INVISIBLE
+    }
+
+    fun arrowCardDownToUpAnimation(frameLayout: FrameLayout, context: Context) {
+        val animationFrameLayoutDown = AnimationUtils.loadAnimation(context, R.anim.alpha_arrow_end)
+        frameLayout.startAnimation(animationFrameLayoutDown)
+        frameLayout.visibility = View.INVISIBLE
+        frameLayout.background = ContextCompat.getDrawable(context, R.drawable.ic_arrow_up)
+
+        val animationFrameLayoutUp =
+            AnimationUtils.loadAnimation(context, R.anim.alpha_message_begin)
+        frameLayout.startAnimation(animationFrameLayoutUp)
+        frameLayout.visibility = View.VISIBLE
+    }
+
+    fun arrowCardUpToDownAnimation(frameLayout: FrameLayout, context: Context) {
+        val animationFrameLayoutDown = AnimationUtils.loadAnimation(context, R.anim.alpha_arrow_end)
+        frameLayout.startAnimation(animationFrameLayoutDown)
+        frameLayout.visibility = View.INVISIBLE
+        frameLayout.background = ContextCompat.getDrawable(context, R.drawable.ic_arrow_down)
+
+        val animationFrameLayoutUp =
+            AnimationUtils.loadAnimation(context, R.anim.alpha_message_begin)
+        frameLayout.startAnimation(animationFrameLayoutUp)
+        frameLayout.visibility = View.VISIBLE
     }
 
     fun propertyAnimationShow(editTextLine: EditText, context: Context) {
 
         val colorFrom = 1627389952
-        val colorTo: Int = context.resources.getColor(R.color.incorrect_data, context.resources.newTheme())
+        val colorTo: Int =
+            context.resources.getColor(R.color.incorrect_data, context.resources.newTheme())
 
         val colorAnimation: ValueAnimator =
             ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, colorTo)
@@ -60,11 +112,10 @@ object ViewsAnimation {
     }
 
     fun propertyAnimationHide(editTextLine: EditText, context: Context) {
-        userScope.launch {
-            delay(2000)
-
+        Handler(Looper.getMainLooper()).postDelayed({
             val colorTo = 1627389952
-            val colorFrom: Int = context.resources.getColor(R.color.incorrect_data, context.resources.newTheme())
+            val colorFrom: Int =
+                context.resources.getColor(R.color.incorrect_data, context.resources.newTheme())
 
             val colorAnimation: ValueAnimator =
                 ValueAnimator.ofObject(ArgbEvaluator(), colorFrom, colorTo)
@@ -73,10 +124,15 @@ object ViewsAnimation {
                 editTextLine.setHintTextColor(ColorStateList.valueOf(it.animatedValue as Int))
             }
             colorAnimation.start()
-        }
+        }, 2000)
     }
 
-    fun revealButton(frameLayout: FrameLayout, textView: TextView, revealView: View, context: Context) {
+    fun revealButton(
+        frameLayout: FrameLayout,
+        textView: TextView,
+        revealView: View,
+        context: Context
+    ) {
         frameLayout.elevation = 0f
 
         revealView.visibility = View.VISIBLE
@@ -92,7 +148,7 @@ object ViewsAnimation {
         val reveal = ViewAnimationUtils
             .createCircularReveal(revealView, x, y, getFabWidth(context), finalRadius)
 
-        reveal.duration = 350
+        reveal.duration = 400
         reveal.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator?) {
                 reset(animation)
@@ -105,7 +161,7 @@ object ViewsAnimation {
                 textView.alpha = 1f
                 frameLayout.elevation = 4f
                 val layoutParams = frameLayout.layoutParams
-                layoutParams.width = (context.resources.displayMetrics.density * 300).toInt()
+                layoutParams.width = (context.resources.displayMetrics.density * 357).toInt()
                 frameLayout.requestLayout()
             }
         })
@@ -129,7 +185,10 @@ object ViewsAnimation {
         progressBar
             .indeterminateDrawable
             .colorFilter =
-            BlendModeColorFilterCompat.createBlendModeColorFilterCompat(Color.parseColor("#ffffff"), BlendModeCompat.SRC_IN)
+            BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                Color.parseColor("#ffffff"),
+                BlendModeCompat.SRC_IN
+            )
         progressBar.visibility = View.VISIBLE
     }
 
@@ -147,11 +206,12 @@ object ViewsAnimation {
     }
 
     fun fadeOutProgressDialog(progressBar: ProgressBar) {
-        progressBar.animate().alpha(0f).setDuration(250).setListener(object : AnimatorListenerAdapter(){
-            override fun onAnimationEnd(animation: Animator?) {
-                super.onAnimationEnd(animation)
-            }
-        }).start()
+        progressBar.animate().alpha(0f).setDuration(250)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?) {
+                    super.onAnimationEnd(animation)
+                }
+            }).start()
     }
 
     fun resetButton(frameLayout: FrameLayout, textView: TextView, context: Context) {
@@ -159,7 +219,7 @@ object ViewsAnimation {
         textView.alpha = 1f
         frameLayout.elevation = 4f
         val layoutParams = frameLayout.layoutParams
-        layoutParams.width = (context.resources.displayMetrics.density * 300).toInt()
+        layoutParams.width = (context.resources.displayMetrics.density * 357).toInt()
         frameLayout.requestLayout()
     }
 
