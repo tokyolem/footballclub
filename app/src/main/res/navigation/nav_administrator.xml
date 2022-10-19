@@ -92,7 +92,7 @@
     </fragment>
     <fragment
         android:id="@+id/playerPageFragment"
-        android:name="com.ftclub.footballclub.PlayerPageFragment"
+        android:name="com.ftclub.footballclub.ui.players.PlayerPageFragment"
         android:label="fragment_player_page"
         tools:layout="@layout/fragment_player_page" >
         <action
