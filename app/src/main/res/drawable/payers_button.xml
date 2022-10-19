@@ -3,6 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
 
-    <solid android:color="@color/background_about_app"/>
-    <corners android:radius="50dp"/>
+    <solid android:color="@color/background_to_contacts"/>
+    <corners android:radius="10dp"/>
 </shape>
