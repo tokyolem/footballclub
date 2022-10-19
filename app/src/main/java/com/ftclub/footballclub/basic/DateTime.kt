@@ -19,7 +19,7 @@ object DateTime {
     fun getFormatDateTime(): String {
         var dateTime = getCurrentDateTime()
 
-        dateTime = dateTime.substring(0, dateTime.indexOf("GMT"))
+        dateTime = dateTime.replace("GMT+03:00", "")
 
         for (dayWeek in daysWeek)
             if (dateTime.contains(dayWeek.key))
@@ -37,7 +37,7 @@ object DateTime {
     private fun getCurrentDateTime(): String{
         val date = Date()
 
-        return date.toString()
+        return "$date"
     }
 
 }
