@@ -13,7 +13,7 @@ import com.ftclub.footballclub.R
  * create an instance of this fragment.
  */
 class PlayerPageFragment : Fragment() {
-
+    
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
