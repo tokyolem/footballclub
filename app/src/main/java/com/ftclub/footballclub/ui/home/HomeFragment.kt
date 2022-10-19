@@ -14,6 +14,8 @@ import com.ftclub.footballclub.SignInActivity
 import com.ftclub.footballclub.basic.DateTime
 import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
 import com.ftclub.footballclub.basic.room.accounts.viewModel.AccountsViewModel
+import com.ftclub.footballclub.databinding.FragmentAddAgeBinding
+import com.ftclub.footballclub.databinding.FragmentHomeBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,25 +27,20 @@ import kotlinx.coroutines.launch
  */
 class HomeFragment : Fragment() {
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Main)
+    private lateinit var _binding: FragmentHomeBinding
+    private val binding get() = _binding
+
+    private lateinit var dbViewModel: AccountsViewModel
+    private lateinit var accountsList: List<Accounts>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+    ): View {
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        dbViewModel = ViewModelProviders.of(this)[AccountsViewModel::class.java]
 
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        coroutineScope.launch {
-            accountsList = SignInActivity.accountsViewModel.getAccountsList()
-            createDefaultAdminAccountIfNotExist()
-        }
-
+        return binding.root
     }
 
     override fun onStart() {
@@ -52,35 +49,30 @@ class HomeFragment : Fragment() {
     }
 
     private fun navigation() {
-        val toAuthorizationFragment =
-            requireActivity().findViewById<FrameLayout>(R.id.to_authorization_page)
-        val toRegistrationFragment =
-            requireActivity().findViewById<FrameLayout>(R.id.to_registration_page)
-
-        toAuthorizationFragment.setOnClickListener {
+        binding.toAuthorizationPage.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_authorizationFragment)
+            dbViewModel.accountsLiveData.observe(viewLifecycleOwner) { accounts ->
+                accountsList = accounts
+            }
+            createDefaultAdminAccountIfNotExist()
         }
 
-        toRegistrationFragment.setOnClickListener {
+        binding.toRegistrationPage.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_registrationFragment)
         }
     }
 
     private fun createDefaultAdminAccountIfNotExist() {
-        if (accountsList!!.isEmpty()) {
-            SignInActivity.accountsViewModel.insertAccount(
+        if (accountsList.isEmpty()) {
+            dbViewModel.insertAccount(
                 Accounts(
                     "admin", "admin", true, DateTime.getFormatDateTime(),
-                    "admin", "admin", "admin",
-                    "admin", "admin", "admin"
+                    "Тренер", "Тренер", "23/06/2002",
+                    "Дмитрий", "Фоменок (тренер)", "+375 (29) 15-15-860"
                 )
             )
         } else {
             return
         }
-    }
-
-    companion object {
-        var accountsList: List<Accounts>? = null
     }
 }
