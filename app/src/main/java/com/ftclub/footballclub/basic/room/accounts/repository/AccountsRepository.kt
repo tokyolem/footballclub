@@ -1,24 +1,25 @@
 package com.ftclub.footballclub.basic.room.accounts.repository
 
-import androidx.lifecycle.LiveData
+import androidx.annotation.WorkerThread
 import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
 import com.ftclub.footballclub.basic.room.accounts.daos.AccountsDao
+import javax.inject.Inject
 
-class AccountsRepository(private val accountsDao: AccountsDao) {
+class AccountsRepository @Inject constructor(
+    private val accountsDao: AccountsDao
+) {
 
-    fun getAccounts(): LiveData<List<Accounts>> = accountsDao.getAccounts()
+    suspend fun deleteAccount(accountId: Long) {
+        accountsDao.deleteAccount(accountId)
+    }
 
-    suspend fun getAccountsToList(): List<Accounts> = accountsDao.getAccountsToList()
+    fun getAccountsFlow() = accountsDao.getAccounts()
 
+    @WorkerThread
     suspend fun getAccountEmail(accountEmail: String): List<Accounts> =
         accountsDao.getAccountEmail(accountEmail)
 
-    suspend fun getAccountsIds(id: Long): List<Accounts> =
-        accountsDao.getAccountsIds(id)
-
-    suspend fun getDateTimeByEmail(accountEmail: String): List<Accounts> =
-        accountsDao.getDateTimeByEmail(accountEmail)
-
+    @WorkerThread
     suspend fun insertAccount(account: Accounts) {
         accountsDao.insertAccount(account)
     }
