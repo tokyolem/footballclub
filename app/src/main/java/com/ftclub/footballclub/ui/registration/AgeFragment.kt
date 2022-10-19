@@ -9,12 +9,15 @@ import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.ftclub.footballclub.R
 import com.ftclub.footballclub.SignInActivity
 import com.ftclub.footballclub.basic.DateTime
 import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
+import com.ftclub.footballclub.basic.room.accounts.viewModel.AccountsViewModel
+import com.ftclub.footballclub.databinding.FragmentAgeBinding
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Date
@@ -27,16 +30,19 @@ import java.util.TimeZone
  */
 class AgeFragment : Fragment() {
 
-    private lateinit var viewObjects: View
+    private lateinit var _binding: FragmentAgeBinding
+    private val binding get() = _binding
+
+    private lateinit var dbViewModel: AccountsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_age, container, false)
-        viewObjects = view
+    ): View {
+        _binding = FragmentAgeBinding.inflate(inflater, container, false)
+        dbViewModel = ViewModelProviders.of(this)[AccountsViewModel::class.java]
 
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,8 +53,7 @@ class AgeFragment : Fragment() {
     }
 
     private fun signUp() {
-        val signUpButton = viewObjects.findViewById<FrameLayout>(R.id.sign_up_final_button)
-        signUpButton.setOnClickListener {
+        binding.signUpFinalButton.setOnClickListener {
             putAccountToDatabase()
         }
     }
@@ -57,7 +62,7 @@ class AgeFragment : Fragment() {
         val arguments: AgeFragmentArgs by navArgs()
         val registrationData = arguments.regData
 
-        SignInActivity.accountsViewModel.insertAccount(
+        dbViewModel.insertAccount(
             Accounts(
                 registrationData[0], registrationData[1], false, DateTime.getFormatDateTime(),
                 registrationData[2], registrationData[3], getUserAge(),
@@ -70,12 +75,12 @@ class AgeFragment : Fragment() {
     }
 
     private fun setCurrentDateOnView() = run {
-        viewObjects.findViewById<DatePicker>(R.id.date_picker).maxDate =
+        binding.datePicker.maxDate =
             System.currentTimeMillis()
     }
 
     private fun getUserAge(): String {
-        val datePicker = viewObjects.findViewById<DatePicker>(R.id.date_picker)
+        val datePicker = binding.datePicker
 
         val year = datePicker.year.toString()
         var month = datePicker.month.toString()
@@ -93,12 +98,8 @@ class AgeFragment : Fragment() {
     }
 
     private fun navigation() {
-        val toInformationFragment =
-            viewObjects.findViewById<FrameLayout>(R.id.to_inf_page_from_age_page)
-
-        toInformationFragment.setOnClickListener {
+        binding.toInfPageFromAgePage.setOnClickListener {
             findNavController().navigate(R.id.action_ageFragment_to_informationFragment)
         }
     }
-
 }

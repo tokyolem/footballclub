@@ -9,12 +9,15 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.ftclub.footballclub.R
 import com.ftclub.footballclub.SignInActivity
 import com.ftclub.footballclub.basic.DateTime
 import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
+import com.ftclub.footballclub.basic.room.accounts.viewModel.AccountsViewModel
+import com.ftclub.footballclub.databinding.FragmentRegistrationBinding
 import com.ftclub.footballclub.ui.ViewsAnimation
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.CoroutineScope
@@ -30,23 +33,21 @@ import java.util.Date
 class RegistrationFragment : Fragment() {
 
     private val userScope = CoroutineScope(Dispatchers.Main)
-    private lateinit var bundle: Bundle
 
-    private val EMAIL_KEY = "email_key"
-    private val PASSWORD_KEY = "password_key"
+    private lateinit var _binding: FragmentRegistrationBinding
+    private val binding get() = _binding
 
-    private val informationFragment = InformationFragment()
+    private lateinit var dbViewModel: AccountsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_registration, container, false)
+        _binding = FragmentRegistrationBinding.inflate(inflater, container, false)
+        dbViewModel = ViewModelProviders.of(this)[AccountsViewModel::class.java]
 
-        bundle = Bundle()
-
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,8 +57,7 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun signUp() {
-        val signUpButton = requireActivity().findViewById<FloatingActionButton>(R.id.sign_up_button)
-        signUpButton.setOnClickListener {
+        binding.signUpButton.setOnClickListener {
             userScope.launch {
                 putAccountToDatabase()
             }
@@ -65,19 +65,15 @@ class RegistrationFragment : Fragment() {
     }
 
     private suspend fun isAccountExist(accountEmail: String): Boolean {
-        val accountEmails = SignInActivity.accountsViewModel.getAccountEmail(accountEmail)
+        val accountEmails = dbViewModel.getAccountEmail(accountEmail)
 
         return accountEmails.isNotEmpty()
     }
 
     private suspend fun putAccountToDatabase() {
-        val userNewEmailLine = requireActivity().findViewById<EditText>(R.id.user_new_email)
-        val userNewPasswordLine = requireActivity().findViewById<EditText>(R.id.user_new_password)
-        val userPasswordRepeat = requireActivity().findViewById<EditText>(R.id.user_repeat_password)
-
-        val userNewEmail = userNewEmailLine.text.toString()
-        val userNewPassword = userNewPasswordLine.text.toString()
-        val passwordRepeat = userPasswordRepeat.text.toString()
+        val userNewEmail = binding.userNewEmail.text.toString()
+        val userNewPassword = binding.userNewPassword.text.toString()
+        val passwordRepeat = binding.userRepeatPassword.text.toString()
 
         if (userNewEmail.isEmpty() || userNewPassword.isEmpty() || passwordRepeat.isEmpty()) {
             registrationLinesEmptyAnimation()
@@ -100,10 +96,10 @@ class RegistrationFragment : Fragment() {
     private fun registrationLinesEmptyAnimation() {
         clearFocus()
 
-        val userNewEmailLine = requireActivity().findViewById<EditText>(R.id.user_new_email)
-        val userNewPasswordLine = requireActivity().findViewById<EditText>(R.id.user_new_password)
-        val userPasswordRepeat = requireActivity().findViewById<EditText>(R.id.user_repeat_password)
-        val incorrectMessage = requireActivity().findViewById<TextView>(R.id.message_registration)
+        val userNewEmailLine = binding.userNewEmail
+        val userNewPasswordLine = binding.userNewPassword
+        val userPasswordRepeat = binding.userRepeatPassword
+        val incorrectMessage = binding.messageRegistration
 
         if (userNewEmailLine.text.isEmpty()) {
             ViewsAnimation.propertyAnimationShow(userNewEmailLine, requireContext())
@@ -128,9 +124,9 @@ class RegistrationFragment : Fragment() {
     private fun registrationPasswordsNotMatchAnimation() {
         clearFocus()
 
-        val userNewPasswordLine = requireActivity().findViewById<EditText>(R.id.user_new_password)
-        val userPasswordRepeat = requireActivity().findViewById<EditText>(R.id.user_repeat_password)
-        val incorrectMessage = requireActivity().findViewById<TextView>(R.id.message_registration)
+        val userNewPasswordLine = binding.userNewPassword
+        val userPasswordRepeat = binding.userRepeatPassword
+        val incorrectMessage = binding.messageRegistration
 
         incorrectMessage.setText(R.string.passwords_reg_error)
         ViewsAnimation.messageShowAnimation(incorrectMessage, requireContext())
@@ -147,8 +143,8 @@ class RegistrationFragment : Fragment() {
     private fun accountExistAnimation() {
         clearFocus()
 
-        val userNewEmailLine = requireActivity().findViewById<EditText>(R.id.user_new_email)
-        val incorrectMessage = requireActivity().findViewById<TextView>(R.id.message_registration)
+        val userNewEmailLine = binding.userNewEmail
+        val incorrectMessage = binding.messageRegistration
 
         incorrectMessage.setText(R.string.account_exist_error)
 
@@ -160,19 +156,13 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun clearFocus() {
-        val userNewEmailLine = requireActivity().findViewById<EditText>(R.id.user_new_email)
-        val userNewPasswordLine = requireActivity().findViewById<EditText>(R.id.user_new_password)
-        val userPasswordRepeat = requireActivity().findViewById<EditText>(R.id.user_repeat_password)
-
-        userNewEmailLine.clearFocus()
-        userNewPasswordLine.clearFocus()
-        userPasswordRepeat.clearFocus()
+        binding.userNewEmail.clearFocus()
+        binding.userNewPassword.clearFocus()
+        binding.userRepeatPassword.clearFocus()
     }
 
     private fun navigation() {
-        val toSignInButton =
-            requireActivity().findViewById<FrameLayout>(R.id.to_home_page_from_registration_page)
-        toSignInButton.setOnClickListener {
+        binding.toHomePageFromRegistrationPage.setOnClickListener {
             findNavController().navigate(R.id.action_registrationFragment_to_homeFragment)
         }
     }
