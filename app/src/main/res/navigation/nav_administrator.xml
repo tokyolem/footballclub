@@ -17,7 +17,11 @@
         tools:layout="@layout/fragment_players" >
         <action
             android:id="@+id/action_navigation_players_to_playerPageFragment"
-            app:destination="@id/playerPageFragment" />
+            app:destination="@id/playerPageFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_left"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_add"
@@ -97,6 +101,13 @@
         tools:layout="@layout/fragment_player_page" >
         <action
             android:id="@+id/action_playerPageFragment_to_navigation_players"
-            app:destination="@id/navigation_players" />
+            app:destination="@id/navigation_players"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_left"/>
+        <argument
+            android:name="accountEmail"
+            app:argType="string" />
     </fragment>
 </navigation>
