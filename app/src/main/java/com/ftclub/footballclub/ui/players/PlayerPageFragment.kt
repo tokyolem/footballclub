@@ -5,7 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ftclub.footballclub.R
+import androidx.navigation.fragment.findNavController
+import com.ftclub.footballclub.databinding.FragmentPlayerPageBinding
 
 /**
  * A simple [Fragment] subclass.
@@ -13,13 +14,17 @@ import com.ftclub.footballclub.R
  * create an instance of this fragment.
  */
 class PlayerPageFragment : Fragment() {
+
+    private lateinit var _binding: FragmentPlayerPageBinding
+    private val binding get() = _binding
     
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_player_page, container, false)
+    ): View {
+        _binding = FragmentPlayerPageBinding.inflate(inflater, container, false)
+
+        return binding.root
     }
-    
+
 }
