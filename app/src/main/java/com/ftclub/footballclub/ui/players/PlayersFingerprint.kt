@@ -4,14 +4,20 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.ftclub.footballclub.R
 import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
 import com.ftclub.footballclub.databinding.PlayersCardBinding
 import com.ftclub.footballclub.ui.BaseViewHolder
 import com.ftclub.footballclub.ui.ItemFingerprint
+import com.ftclub.footballclub.ui.players.PlayersFragmentDirections.ActionNavigationPlayersToPlayerPageFragment
 
 class PlayersFingerprint(
-    private val context: Context
+    private val context: Context,
+    private val fragment: Fragment
 ) : ItemFingerprint<PlayersCardBinding, Accounts> {
 
     override fun isRelativeItem(item: Accounts) = true
@@ -23,17 +29,19 @@ class PlayersFingerprint(
         parent: ViewGroup
     ): BaseViewHolder<PlayersCardBinding, Accounts> {
         val binding = PlayersCardBinding.inflate(layoutInflater, parent, false)
-        return PlayersViewHolder(binding, context)
+        return PlayersViewHolder(binding, context, fragment)
     }
 }
 
 class PlayersViewHolder(
     binding: PlayersCardBinding,
-    private val context: Context
+    private val context: Context,
+    private val fragment: Fragment
 ) : BaseViewHolder<PlayersCardBinding, Accounts>(binding) {
 
     override fun onBind(item: Accounts) {
         voidNotice(item)
+        onCardClick(item)
     }
 
     private fun voidNotice(item: Accounts) {
@@ -74,6 +82,13 @@ class PlayersViewHolder(
             binding.playerCardTitle.text = "${item.firstName} ${item.lastName}"
             binding.phone.text = "Номер телефона: ${item.phoneNumber}"
         }
+    }
 
+    private fun onCardClick(item: Accounts) {
+        binding.playersCard.setOnClickListener {
+            val action =
+                PlayersFragmentDirections.actionNavigationPlayersToPlayerPageFragment(item.accountEmail)
+            fragment.findNavController().navigate(action)
+        }
     }
 }

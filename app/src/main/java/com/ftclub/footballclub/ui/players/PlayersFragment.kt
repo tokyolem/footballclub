@@ -44,6 +44,6 @@ class PlayersFragment : Fragment() {
     }
 
     private fun getAccounts() = listOf(
-        PlayersFingerprint(requireContext())
+        PlayersFingerprint(requireContext(), this)
     )
 }
