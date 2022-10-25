@@ -15,6 +15,8 @@ class AccountsRepository @Inject constructor(
 
     fun getAccountsFlow() = accountsDao.getAccounts()
 
+    fun getAccountByEmail(accountEmail: String) = accountsDao.getAccountByEmail(accountEmail)
+
     @WorkerThread
     suspend fun getAccountEmail(accountEmail: String): List<Accounts> =
         accountsDao.getAccountEmail(accountEmail)

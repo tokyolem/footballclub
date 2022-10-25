@@ -14,6 +14,9 @@ interface AccountsDao {
     fun getAccounts(): Flow<List<Accounts>>
 
     @Query("SELECT * FROM ${AccountsDatabase.ACCOUNTS_TABLE_NAME} WHERE account_email = :accountEmail")
+    fun getAccountByEmail(accountEmail: String): Flow<Accounts>
+
+    @Query("SELECT * FROM ${AccountsDatabase.ACCOUNTS_TABLE_NAME} WHERE account_email = :accountEmail")
     suspend fun getAccountEmail(accountEmail: String): List<Accounts>
 
     @Insert

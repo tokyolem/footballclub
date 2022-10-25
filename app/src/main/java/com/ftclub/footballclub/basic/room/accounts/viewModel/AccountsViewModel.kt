@@ -17,6 +17,7 @@ class AccountsViewModel(application: Application): AndroidViewModel(application)
     private val accountsRepository: AccountsRepository
 
     val accountsLiveData = MutableLiveData<List<Accounts>>()
+    val accountByEmail = MutableLiveData<Accounts>()
 
     init {
         val accountsDao = AccountsDatabase.getDatabase(application).accountsDao()
@@ -24,6 +25,14 @@ class AccountsViewModel(application: Application): AndroidViewModel(application)
         viewModelScope.launch {
             accountsRepository.getAccountsFlow().collect { items ->
                 accountsLiveData.postValue(items)
+            }
+        }
+    }
+
+    fun getAccountByEmail(accountEmail: String) {
+        viewModelScope.launch {
+            accountsRepository.getAccountByEmail(accountEmail).collect { account ->
+                accountByEmail.postValue(account)
             }
         }
     }
