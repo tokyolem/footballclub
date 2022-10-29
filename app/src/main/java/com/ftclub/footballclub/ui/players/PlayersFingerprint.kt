@@ -5,19 +5,20 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.ftclub.footballclub.R
 import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
 import com.ftclub.footballclub.databinding.PlayersCardBinding
 import com.ftclub.footballclub.ui.BaseViewHolder
 import com.ftclub.footballclub.ui.ItemFingerprint
-import com.ftclub.footballclub.ui.players.PlayersFragmentDirections.ActionNavigationPlayersToPlayerPageFragment
+import com.ftclub.footballclub.ui.search.SearchFragment
+import com.ftclub.footballclub.ui.search.SearchFragmentDirections
+
 
 class PlayersFingerprint(
     private val context: Context,
-    private val fragment: Fragment
+    private val fragment: Fragment,
+    private val isSearchFragment: Boolean
 ) : ItemFingerprint<PlayersCardBinding, Accounts> {
 
     override fun isRelativeItem(item: Accounts) = true
@@ -29,14 +30,15 @@ class PlayersFingerprint(
         parent: ViewGroup
     ): BaseViewHolder<PlayersCardBinding, Accounts> {
         val binding = PlayersCardBinding.inflate(layoutInflater, parent, false)
-        return PlayersViewHolder(binding, context, fragment)
+        return PlayersViewHolder(binding, context, fragment, isSearchFragment)
     }
 }
 
 class PlayersViewHolder(
     binding: PlayersCardBinding,
     private val context: Context,
-    private val fragment: Fragment
+    private val fragment: Fragment,
+    private val isSearchFragment: Boolean
 ) : BaseViewHolder<PlayersCardBinding, Accounts>(binding) {
 
     override fun onBind(item: Accounts) {
@@ -86,9 +88,15 @@ class PlayersViewHolder(
 
     private fun onCardClick(item: Accounts) {
         binding.playersCard.setOnClickListener {
-            val action =
-                PlayersFragmentDirections.actionNavigationPlayersToPlayerPageFragment(item.accountEmail)
-            fragment.findNavController().navigate(action)
+            if (isSearchFragment) {
+                val action =
+                    SearchFragmentDirections.actionSearchFragmentToPlayerPageFragment(item.id!!.toInt())
+                fragment.findNavController().navigate(action)
+            } else {
+                val action =
+                    PlayersFragmentDirections.actionNavigationPlayersToPlayerPageFragment(item.id!!.toInt())
+                fragment.findNavController().navigate(action)
+            }
         }
     }
 }

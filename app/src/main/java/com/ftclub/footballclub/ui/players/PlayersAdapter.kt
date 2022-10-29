@@ -40,7 +40,6 @@ class PlayersAdapter(
 
     fun setData(accounts: List<Accounts>) {
         this.items = accounts
-        items.reversed()
         notifyDataSetChanged()
     }
 
