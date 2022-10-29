@@ -46,10 +46,9 @@
     <string name="first_name">Имя</string>
     <string name="last_name">Фамилия</string>
     <string name="phone_number">Номер телефона</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment">ауе</string>
     <string name="or">или</string>
-    <string name="reg_date">Дата регистрации:</string>
+    <string name="reg_date">Дата регистрации</string>
     <string name="save_changes">Сохранить</string>
     <string name="cancel_changes">Отмена</string>
     <string name="ban">Заблокировать</string>
@@ -63,5 +62,23 @@
     <string name="delete_title">Удаление аккаунта</string>
     <string name="full_information">Читать полностью…</string>
     <string name="remove">Удалить</string>
+    <string name="download_photo">Загрузить фотографию</string>
+    <string name="account_data">Данные аккаунта</string>
+    <string name="email_change">Нажмите, чтобы изменить email адрес</string>
+    <string name="change_phone">Нажмите, чтобы изменить номер телефона</string>
+    <string name="player_data">Данные игрока</string>
+    <string name="birth_day">Дата рождения</string>
+    <string name="position">Позиция на поле</string>
+    <string name="about_player">Об игроке</string>
+    <string name="edit">Редактировать</string>
+    <string name="edit_inf_message_2">Здесь можно изменить данные игрока и его аккаунта.</string>
+    <string name="edit_inf_message_1">Редактирование сведений</string>
+    <string name="edit_birthday">Изенить дату рождения</string>
+    <string name="player_questionnaire">Анкета игрока</string>
+    <string name="yes">Да</string>
+    <string name="edit_title">Внесение изменений</string>
+    <string name="edit_message">Применить изменения?</string>
+    <string name="sigh_out_title">Выход</string>
+    <string name="sign_out_message">Вы уверены, что хотите выйти?</string>
 
 </resources>
