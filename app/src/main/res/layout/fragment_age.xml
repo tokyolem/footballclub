@@ -74,15 +74,20 @@
         android:id="@+id/to_inf_page_from_age_page"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/ic_back"
         android:clickable="true"
         android:elevation="4dp"
         android:focusable="true"
         android:foreground="?selectableItemBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_back"/>
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
