@@ -1,28 +1,50 @@
 package com.ftclub.footballclub.ui.dialog
 
-import android.app.AlertDialog
-import android.app.Dialog
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout.LayoutParams
+import androidx.annotation.StringRes
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProviders
-import com.ftclub.footballclub.R
-import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
-import com.ftclub.footballclub.basic.room.accounts.viewModel.AccountsViewModel
+import com.ftclub.footballclub.databinding.FragmentDialogBinding
 
-class CustomDialogFragment(private val item: Accounts) : DialogFragment() {
+class CustomDialogFragment(
+    @StringRes private val title: Int,
+    @StringRes private val message: Int,
+    val action: (Unit) -> Unit
+) : DialogFragment() {
 
-    private lateinit var dbViewModel: AccountsViewModel
+    private lateinit var _binding: FragmentDialogBinding
+    private val binding get() = _binding
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val builder = AlertDialog.Builder(activity)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentDialogBinding.inflate(inflater, container, false)
 
-        dbViewModel = ViewModelProviders.of(this)[AccountsViewModel::class.java]
-
-        return builder.setTitle(R.string.delete_title).setMessage(R.string.delete_message)
-            .setPositiveButton("Да") { _, _ ->
-                dbViewModel.deleteAccount(item.id!!)
-            }.setNegativeButton("Отмена") { dialog, _ ->
-                dialog.dismiss()
-            }.create()
+        return binding.root
     }
+
+    override fun onStart() {
+        super.onStart()
+        binding.title.setText(title)
+        binding.message.setText(message)
+
+        binding.positive.setOnClickListener {
+            action.invoke(Unit)
+            dismiss()
+        }
+        binding.negative.setOnClickListener {
+            dismiss()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        dialog?.window?.setLayout(950, LayoutParams.WRAP_CONTENT)
+    }
+
 }
