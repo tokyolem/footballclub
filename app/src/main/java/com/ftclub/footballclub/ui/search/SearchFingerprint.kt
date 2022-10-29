@@ -13,8 +13,8 @@ import com.ftclub.footballclub.databinding.AccountsCardBinding
 import com.ftclub.footballclub.databinding.PlayersCardBinding
 import com.ftclub.footballclub.ui.BaseViewHolder
 import com.ftclub.footballclub.ui.ItemFingerprint
-import com.ftclub.footballclub.ui.accounts.AccountsViewHolder
-import com.ftclub.footballclub.ui.players.PlayersViewHolder
+import com.ftclub.footballclub.ui.administratorActivity.accounts.AccountsViewHolder
+import com.ftclub.footballclub.ui.administratorActivity.players.PlayersViewHolder
 
 class SearchFingerprint(
     private val searchType: String,

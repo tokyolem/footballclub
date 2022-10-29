@@ -5,7 +5,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ftclub.footballclub.AdministratorActivity">
+    tools:context="com.ftclub.footballclub.ui.administratorActivity.AdministratorActivity">
 
     <include
         android:id="@+id/app_bar_main"

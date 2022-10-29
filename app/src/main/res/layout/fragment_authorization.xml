@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scaleType="centerCrop"
-    tools:context=".ui.authorization.AuthorizationFragment">
+    tools:context=".ui.signInActivity.authorization.AuthorizationFragment">
 
     <LinearLayout
         android:id="@+id/linearLayout"

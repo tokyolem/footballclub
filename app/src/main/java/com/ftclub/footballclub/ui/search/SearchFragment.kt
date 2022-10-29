@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ftclub.footballclub.AdministratorActivity
+import com.ftclub.footballclub.ui.administratorActivity.AdministratorActivity
 import com.ftclub.footballclub.R
 import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
 import com.ftclub.footballclub.basic.room.accounts.viewModel.AccountsViewModel

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/window_background"
     android:orientation="vertical"
-    tools:context="ui.players.PlayerPageFragment">
+    tools:context=".ui.administratorActivity.players.PlayerPageFragment">
 
     <ScrollView
         android:id="@+id/player_scroll_view"

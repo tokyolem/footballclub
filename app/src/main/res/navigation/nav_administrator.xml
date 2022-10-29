@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_accounts"
-        android:name="com.ftclub.footballclub.ui.accounts.AccountsFragment"
+        android:name="com.ftclub.footballclub.ui.administratorActivity.accounts.AccountsFragment"
         android:label="@string/accounts"
         app:enterAnim="@anim/slide_in_right"
         app:exitAnim="@anim/slide_out_right"
@@ -24,7 +24,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_players"
-        android:name="com.ftclub.footballclub.ui.players.PlayersFragment"
+        android:name="com.ftclub.footballclub.ui.administratorActivity.players.PlayersFragment"
         android:label="@string/players"
         app:enterAnim="@anim/slide_in_right"
         app:exitAnim="@anim/slide_out_right"
@@ -52,7 +52,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_add"
-        android:name="com.ftclub.footballclub.ui.add.AddFragment"
+        android:name="com.ftclub.footballclub.ui.administratorActivity.add.AddFragment"
         android:label="@string/add_account"
         app:enterAnim="@anim/slide_in_right"
         app:exitAnim="@anim/slide_out_right"
@@ -76,7 +76,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_about_app"
-        android:name="com.ftclub.footballclub.ui.aboutApp.AboutAppFragment"
+        android:name="com.ftclub.footballclub.ui.administratorActivity.aboutApp.AboutAppFragment"
         android:label="@string/about_app"
         app:enterAnim="@anim/slide_in_right"
         app:exitAnim="@anim/slide_out_right"
@@ -85,7 +85,7 @@
         tools:layout="@layout/fragment_about_app" />
     <fragment
         android:id="@+id/addInformationFragment"
-        android:name="com.ftclub.footballclub.ui.add.AddInformationFragment"
+        android:name="com.ftclub.footballclub.ui.administratorActivity.add.AddInformationFragment"
         android:label="fragment_add_information"
         tools:layout="@layout/fragment_add_information">
         <action
@@ -108,7 +108,7 @@
     </fragment>
     <fragment
         android:id="@+id/addAgeFragment"
-        android:name="com.ftclub.footballclub.ui.add.AddAgeFragment"
+        android:name="com.ftclub.footballclub.ui.administratorActivity.add.AddAgeFragment"
         android:label="fragment_add_age"
         tools:layout="@layout/fragment_add_age">
         <action
@@ -132,7 +132,7 @@
 
     <fragment
         android:id="@+id/playerPageFragment"
-        android:name="com.ftclub.footballclub.ui.players.PlayerPageFragment"
+        android:name="com.ftclub.footballclub.ui.administratorActivity.players.PlayerPageFragment"
         android:label="fragment_player_page"
         tools:layout="@layout/fragment_player_page">
         <action
@@ -156,7 +156,7 @@
 
     <fragment
         android:id="@+id/playerEditFragment"
-        android:name="com.ftclub.footballclub.ui.players.PlayerEditFragment"
+        android:name="com.ftclub.footballclub.ui.administratorActivity.players.PlayerEditFragment"
         android:label="fragment_player_edit"
         tools:layout="@layout/fragment_player_edit">
 
