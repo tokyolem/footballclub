@@ -48,6 +48,16 @@ object ViewsAnimation {
         }, 2000)
     }
 
+    fun viewTextShowAnimation(view: View, context: Context) {
+        val animation = AnimationUtils.loadAnimation(context, R.anim.alpha_message_begin)
+        view.startAnimation(animation)
+    }
+
+    fun viewTextHideAnimation(view: View, context: Context) {
+        val animation = AnimationUtils.loadAnimation(context, R.anim.alpha_message_end)
+        view.startAnimation(animation)
+    }
+
     fun viewShowAnimation(view: View, context: Context) {
         val animation = AnimationUtils.loadAnimation(context, R.anim.alpha_message_begin)
         view.startAnimation(animation)
@@ -72,28 +82,28 @@ object ViewsAnimation {
         view.visibility = View.INVISIBLE
     }
 
-    fun arrowCardDownToUpAnimation(frameLayout: FrameLayout, context: Context) {
+    fun arrowCardDownToUpAnimation(view: View, context: Context) {
         val animationFrameLayoutDown = AnimationUtils.loadAnimation(context, R.anim.alpha_arrow_end)
-        frameLayout.startAnimation(animationFrameLayoutDown)
-        frameLayout.visibility = View.INVISIBLE
-        frameLayout.background = ContextCompat.getDrawable(context, R.drawable.ic_arrow_up)
+        view.startAnimation(animationFrameLayoutDown)
+        view.visibility = View.INVISIBLE
+        view.background = ContextCompat.getDrawable(context, R.drawable.ic_arrow_up)
 
         val animationFrameLayoutUp =
             AnimationUtils.loadAnimation(context, R.anim.alpha_message_begin)
-        frameLayout.startAnimation(animationFrameLayoutUp)
-        frameLayout.visibility = View.VISIBLE
+        view.startAnimation(animationFrameLayoutUp)
+        view.visibility = View.VISIBLE
     }
 
-    fun arrowCardUpToDownAnimation(frameLayout: FrameLayout, context: Context) {
+    fun arrowCardUpToDownAnimation(view: View, context: Context) {
         val animationFrameLayoutDown = AnimationUtils.loadAnimation(context, R.anim.alpha_arrow_end)
-        frameLayout.startAnimation(animationFrameLayoutDown)
-        frameLayout.visibility = View.INVISIBLE
-        frameLayout.background = ContextCompat.getDrawable(context, R.drawable.ic_arrow_down)
+        view.startAnimation(animationFrameLayoutDown)
+        view.visibility = View.INVISIBLE
+        view.background = ContextCompat.getDrawable(context, R.drawable.ic_arrow_down)
 
         val animationFrameLayoutUp =
             AnimationUtils.loadAnimation(context, R.anim.alpha_message_begin)
-        frameLayout.startAnimation(animationFrameLayoutUp)
-        frameLayout.visibility = View.VISIBLE
+        view.startAnimation(animationFrameLayoutUp)
+        view.visibility = View.VISIBLE
     }
 
     fun propertyAnimationShow(editTextLine: EditText, context: Context) {
