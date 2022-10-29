@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
+import com.ftclub.footballclub.AdministratorActivity
 import com.ftclub.footballclub.R
 import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
 import com.ftclub.footballclub.basic.room.accounts.viewModel.AccountsViewModel
@@ -21,8 +22,8 @@ import com.ftclub.footballclub.ui.dialog.CustomDialogFragment
 class AccountFingerprint(
     private val rvView: ViewGroup,
     private val context: Context,
-    private val viewModel: AccountsViewModel,
-    private val activity: FragmentActivity
+    private val activity: FragmentActivity,
+    private val dbViewModel: AccountsViewModel
 ) : ItemFingerprint<AccountsCardBinding, Accounts> {
 
     override fun isRelativeItem(item: Accounts) = true
@@ -34,16 +35,16 @@ class AccountFingerprint(
         parent: ViewGroup
     ): BaseViewHolder<AccountsCardBinding, Accounts> {
         val binding = AccountsCardBinding.inflate(layoutInflater, parent, false)
-        return AccountsViewHolder(binding, rvView, viewModel, context, activity)
+        return AccountsViewHolder(binding, rvView, context, activity, dbViewModel)
     }
 }
 
 class AccountsViewHolder(
     binding: AccountsCardBinding,
     private val rvView: ViewGroup,
-    private val viewModel: AccountsViewModel,
     private val context: Context,
-    private val activity: FragmentActivity
+    private val activity: FragmentActivity,
+    private val dbViewModel: AccountsViewModel
 ) : BaseViewHolder<AccountsCardBinding, Accounts>(binding) {
 
     override fun onBind(item: Accounts) {
@@ -81,8 +82,13 @@ class AccountsViewHolder(
     }
 
     private fun onRemoveAccountButtonClick(item: Accounts) {
+        if (item.accountEmail == "admin") binding.accountDelete.visibility = View.GONE
+
         binding.accountDelete.setOnClickListener {
-            val dialog = CustomDialogFragment(item)
+            val dialog = CustomDialogFragment(
+                R.string.delete_title,
+                R.string.delete_message
+            ) { dbViewModel.deleteAccount(item.id!!) }
             dialog.show(activity.supportFragmentManager, "custom_dialog")
         }
     }
