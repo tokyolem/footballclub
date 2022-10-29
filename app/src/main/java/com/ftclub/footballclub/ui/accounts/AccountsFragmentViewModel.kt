@@ -4,23 +4,28 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.ftclub.footballclub.basic.room.accounts.AccountsDatabase
 import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
 import com.ftclub.footballclub.basic.room.accounts.viewModel.AccountsViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-class AccountsFragmentViewModel(
-    private val accountsViewModel: AccountsViewModel
-) : ViewModel() {
+class AccountsFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val userScope = CoroutineScope(Dispatchers.IO)
+    /*private var accountsFragmentRepository: AccountsFragmentRepository
 
-    var accountsLiveData: LiveData<List<Accounts>> = accountsViewModel.accounts
+    var accountsLiveData: LiveData<List<Accounts>>
 
-    suspend fun getAccountsList(): List<Accounts> =
-        userScope.async {
-            return@async accountsViewModel.getAccountsList()
-        }.await()
+    init {
+        val accountsDao = AccountsDatabase.getDatabase(application).accountsDao()
+        accountsFragmentRepository = AccountsFragmentRepository(accountsDao)
+        accountsLiveData = accountsFragmentRepository.accountsLiveData
+    }
+
+    fun deleteAccount(accountId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            accountsFragmentRepository.deleteAccount(accountId)
+        }
+    }*/
 }

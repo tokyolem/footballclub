@@ -8,10 +8,11 @@
 
     <EditText
         android:id="@+id/own_about"
-        android:layout_width="300dp"
-        android:layout_height="192dp"
-        android:layout_marginBottom="260dp"
-        android:background="@drawable/custom_input"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="188dp"
         android:drawablePadding="12dp"
         android:ems="10"
         android:hint="@string/own_about"
@@ -20,49 +21,16 @@
         android:paddingEnd="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.515"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <EditText
-        android:id="@+id/phone_number"
-        android:layout_width="300dp"
-        android:layout_height="54dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/custom_input"
-        android:drawablePadding="12dp"
-        android:ems="10"
-        android:hint="@string/phone_number"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/own_about"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.513"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <EditText
-        android:id="@+id/last_name"
-        android:layout_width="300dp"
-        android:layout_height="54dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/custom_input"
-        android:drawablePadding="12dp"
-        android:ems="10"
-        android:hint="@string/last_name"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/phone_number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.513"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/first_name"
-        android:layout_width="300dp"
-        android:layout_height="54dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/custom_input"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="32dp"
         android:drawablePadding="12dp"
         android:ems="10"
         android:hint="@string/first_name"
@@ -70,8 +38,67 @@
         android:paddingEnd="12dp"
         app:layout_constraintBottom_toTopOf="@+id/last_name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/last_name"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="28dp"
+        android:drawablePadding="12dp"
+        android:ems="10"
+        android:hint="@string/last_name"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/phone_number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/phone_number"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="12dp"
+
+        android:drawablePadding="12dp"
+        android:ems="10"
+        android:hint="@string/phone_number"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/own_about"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/select_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="12dp"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/select_item"
+        app:layout_constraintBottom_toTopOf="@+id/spinner"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="340dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="1dp"
+        android:entries="@array/positions"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.463"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/own_about" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/to_age_fragment"
@@ -90,56 +117,55 @@
 
     <TextView
         android:id="@+id/inf_text_fragment"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         android:fontFamily="sans-serif-light"
-        android:gravity="center"
+        android:gravity="start"
         android:text="@string/own_about_information"
-        android:textSize="20sp"
+        android:textSize="28sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/own_about"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.101" />
-
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="340dp"
-        android:layout_height="37dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="1dp"
-        android:entries="@array/positions"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.469"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/own_about" />
+        app:layout_constraintVertical_bias="0.183" />
 
     <TextView
-        android:id="@+id/select_text"
-        android:layout_width="wrap_content"
+        android:id="@+id/select_pos_text"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="34dp"
-        android:layout_marginBottom="4dp"
-        android:fontFamily="sans-serif-light"
-        android:text="@string/select_item"
-        app:layout_constraintBottom_toTopOf="@+id/spinner"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:text="@string/own_select_pos"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/first_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/inf_text_fragment"
+        app:layout_constraintVertical_bias="0.0" />
 
     <FrameLayout
         android:id="@+id/to_reg_page_from_inf_page"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/ic_back"
         android:clickable="true"
         android:elevation="4dp"
         android:focusable="true"
         android:foreground="?selectableItemBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_back"/>
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

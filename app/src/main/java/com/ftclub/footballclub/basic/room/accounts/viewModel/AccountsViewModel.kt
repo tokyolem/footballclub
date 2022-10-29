@@ -1,53 +1,68 @@
 package com.ftclub.footballclub.basic.room.accounts.viewModel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.ftclub.footballclub.basic.room.accounts.AccountsDatabase
 import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
 import com.ftclub.footballclub.basic.room.accounts.repository.AccountsRepository
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class AccountsViewModel(application: Application): AndroidViewModel(application) {
 
-    private val userScope = CoroutineScope(Dispatchers.IO)
-
     private val accountsRepository: AccountsRepository
-    val accounts: LiveData<List<Accounts>>
+
+    val accountsLiveData = MutableLiveData<List<Accounts>>()
+    val accountByEmail = MutableLiveData<Accounts>()
+    val accountById = MutableLiveData<Accounts>()
 
     init {
         val accountsDao = AccountsDatabase.getDatabase(application).accountsDao()
         accountsRepository = AccountsRepository(accountsDao)
-        accounts = accountsRepository.getAccounts()
+        viewModelScope.launch {
+            accountsRepository.getAccountsFlow().collect { items ->
+                accountsLiveData.postValue(items)
+            }
+        }
     }
 
-    suspend fun getAccountsList(): List<Accounts> =
-        userScope.async {
-        return@async accountsRepository.getAccountsToList()
-    }.await()
+    fun getAccountByEmail(accountEmail: String) {
+        viewModelScope.launch {
+            accountsRepository.getAccountByEmail(accountEmail).collect { account ->
+                accountByEmail.postValue(account)
+            }
+        }
+    }
+
+    fun getAccountById(accountId: Long) {
+        viewModelScope.launch {
+            accountsRepository.getAccountById(accountId).collect { account ->
+                accountById.postValue(account)
+            }
+        }
+    }
 
     suspend fun getAccountEmail(accountEmail: String): List<Accounts> =
-        userScope.async {
+        viewModelScope.async {
         return@async accountsRepository.getAccountEmail(accountEmail)
     }.await()
 
-    suspend fun getAccountsIds(id: Long): List<Accounts> =
-        userScope.async {
-            return@async accountsRepository.getAccountsIds(id)
-        }.await()
-
-    suspend fun getDateTimeByEmail(accountEmail: String): List<Accounts> =
-        userScope.async {
-            return@async accountsRepository.getDateTimeByEmail(accountEmail)
-        }.await()
+    fun updateAccount(account: Accounts) {
+        viewModelScope.launch(Dispatchers.IO) {
+            accountsRepository.updateAccount(account)
+        }
+    }
 
     fun insertAccount(account: Accounts) {
         viewModelScope.launch(Dispatchers.IO) {
             accountsRepository.insertAccount(account)
+        }
+    }
+
+    fun deleteAccount(accountId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            accountsRepository.deleteAccount(accountId)
         }
     }
 }

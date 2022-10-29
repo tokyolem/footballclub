@@ -15,7 +15,8 @@
         <activity
             android:name=".SignInActivity"
             android:exported="true"
-            android:theme="@style/Theme.FootballClub">
+            android:theme="@style/Theme.FootballClub"
+            android:screenOrientation="locked">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,6 +26,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -32,10 +34,13 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
         <activity
             android:name=".AdministratorActivity"
             android:exported="true"
-            android:theme="@style/Theme.FootballClub.Admin">
+            android:theme="@style/Theme.FootballClub.Admin"
+            android:screenOrientation="locked"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

@@ -12,6 +12,7 @@ import android.widget.Spinner
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.ftclub.footballclub.R
+import com.ftclub.footballclub.databinding.FragmentInformationBinding
 import com.ftclub.footballclub.ui.ViewsAnimation
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -22,17 +23,16 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
  */
 class InformationFragment : Fragment() {
 
-    private lateinit var viewObjects: View
+    private lateinit var _binding: FragmentInformationBinding
+    private val binding get() = _binding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_information, container, false)
-        viewObjects = view
-
-        return view
+        _binding = FragmentInformationBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,12 +41,7 @@ class InformationFragment : Fragment() {
     }
 
     private fun navigation() {
-        val toAgeFragmentButton =
-            viewObjects.findViewById<FloatingActionButton>(R.id.to_age_fragment)
-        val toRegistrationFragment =
-            viewObjects.findViewById<FrameLayout>(R.id.to_reg_page_from_inf_page)
-
-        toAgeFragmentButton.setOnClickListener {
+        binding.toAgeFragment.setOnClickListener {
             if (isInformationLinesEmpty()) {
                 informationLinesEmpty()
             } else {
@@ -62,38 +57,35 @@ class InformationFragment : Fragment() {
             }
         }
 
-        toRegistrationFragment.setOnClickListener {
+        binding.toRegPageFromInfPage.setOnClickListener {
             findNavController().navigate(R.id.action_informationFragment_to_registrationFragment)
         }
     }
 
-    private fun getOwnAboutInformation(): String =
-        viewObjects.findViewById<EditText>(R.id.own_about).text.toString()
+    private fun getOwnAboutInformation() =
+        binding.ownAbout.text.toString()
 
-    private fun getPlayerPosition(): String =
-        viewObjects.findViewById<Spinner>(R.id.spinner).selectedItem.toString()
+    private fun getPlayerPosition() =
+       binding.spinner.selectedItem.toString()
 
-    private fun getPlayerFirstName(): String =
-        viewObjects.findViewById<EditText>(R.id.first_name).text.toString()
+    private fun getPlayerFirstName() =
+        binding.firstName.text.toString()
 
-    private fun getPlayerLastName(): String =
-        viewObjects.findViewById<EditText>(R.id.last_name).text.toString()
+    private fun getPlayerLastName() =
+        binding.lastName.text.toString()
 
-    private fun getPlayerPhoneNumber(): String =
-        viewObjects.findViewById<EditText>(R.id.phone_number).text.toString()
+    private fun getPlayerPhoneNumber() =
+        binding.phoneNumber.text.toString()
 
-    private fun isInformationLinesEmpty(): Boolean {
-        val firstName = viewObjects.findViewById<EditText>(R.id.first_name).text.toString()
-        val lastName = viewObjects.findViewById<EditText>(R.id.last_name).text.toString()
-        val phoneNumber = viewObjects.findViewById<EditText>(R.id.phone_number).text.toString()
-
-        return firstName.isEmpty() || lastName.isEmpty() || phoneNumber.isEmpty()
-    }
+    private fun isInformationLinesEmpty() =
+        binding.firstName.text.toString().isEmpty()
+                || binding.lastName.text.toString().isEmpty()
+                || binding.phoneNumber.text.toString().isEmpty()
 
     private fun informationLinesEmpty() {
-        val firstNameLine = viewObjects.findViewById<EditText>(R.id.first_name)
-        val lastNameLine = viewObjects.findViewById<EditText>(R.id.last_name)
-        val phoneNumberLine = viewObjects.findViewById<EditText>(R.id.phone_number)
+        val firstNameLine = binding.firstName
+        val lastNameLine = binding.lastName
+        val phoneNumberLine = binding.phoneNumber
 
         if (firstNameLine.text.toString().isEmpty()) {
             ViewsAnimation.propertyAnimationShow(firstNameLine, requireContext())

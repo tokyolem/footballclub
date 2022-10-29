@@ -23,8 +23,10 @@
 
     <FrameLayout
         android:id="@+id/sign_up_final_button"
-        android:layout_width="300dp"
-        android:layout_height="56dp"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="80dp"
@@ -52,32 +54,40 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         android:fontFamily="sans-serif-light"
-        android:gravity="center"
+        android:gravity="start"
         android:text="@string/age"
         android:textSize="28sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/date_picker"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.348" />
+        app:layout_constraintVertical_bias="0.367" />
 
     <FrameLayout
         android:id="@+id/to_inf_page_from_age_page"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/ic_back"
         android:clickable="true"
         android:elevation="4dp"
         android:focusable="true"
         android:foreground="?selectableItemBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="15dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_back"/>
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

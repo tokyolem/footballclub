@@ -9,6 +9,9 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewAnimationUtils
@@ -21,16 +24,21 @@ import android.widget.TextView
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.ftclub.footballclub.AdministratorActivity
 import com.ftclub.footballclub.MainActivity
 import com.ftclub.footballclub.R
 import com.ftclub.footballclub.SignInActivity
+import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
+import com.ftclub.footballclub.basic.room.accounts.viewModel.AccountsViewModel
+import com.ftclub.footballclub.databinding.FragmentAuthorizationBinding
 import com.ftclub.footballclub.ui.ViewsAnimation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.ArrayList
 import kotlin.math.max
 
 /**
@@ -40,16 +48,22 @@ import kotlin.math.max
  */
 class AuthorizationFragment : Fragment() {
 
-    private val userScope = CoroutineScope(Dispatchers.Main)
+    private lateinit var _binding: FragmentAuthorizationBinding
+    private val binding get() = _binding
+
+    private lateinit var viewModel: AccountsViewModel
+    lateinit var accountsList: List<Accounts>
+
+    private val ACCOUNTS_EXTRA_KEY = "accounts_list"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        _binding = FragmentAuthorizationBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProviders.of(this)[AccountsViewModel::class.java]
 
-        val view = inflater.inflate(R.layout.fragment_authorization, container, false)
-
-        return view
+        return binding.root
     }
 
     override fun onStart() {
@@ -61,8 +75,7 @@ class AuthorizationFragment : Fragment() {
     }
 
     private fun navigation() {
-        val toSignUpButton = requireActivity().findViewById<FrameLayout>(R.id.to_home_page_from_authorization_page)
-        toSignUpButton.setOnClickListener {
+        binding.toHomePageFromAuthorizationPage.setOnClickListener {
             findNavController().navigate(R.id.action_authorizationFragment_to_homeFragment)
         }
     }
@@ -70,99 +83,97 @@ class AuthorizationFragment : Fragment() {
     private fun delayedStartAdministratorActivity() {
         val intent = Intent(context, AdministratorActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            val serializableList = accountsList as ArrayList<Accounts>
+            putExtra(ACCOUNTS_EXTRA_KEY, serializableList as java.io.Serializable)
         }
-        CoroutineScope(Dispatchers.Main).launch {
-            delay(100)
+
+        Handler(Looper.getMainLooper()).postDelayed({
             startActivity(intent)
-        }
+        }, 100)
     }
 
     private fun nextActionWithActivityChange() {
-        val signInButton = requireActivity().findViewById<FrameLayout>(R.id.sign_in_button)
-        val textSignIn = requireActivity().findViewById<TextView>(R.id.text_sign_in)
-        val revealView = requireActivity().findViewById<View>(R.id.reveal)
-        val progressBarSignIn = requireActivity().findViewById<ProgressBar>(R.id.progress_bar_sign_in)
-
-        userScope.launch {
-            delay(2000)
-            
+        Handler(Looper.getMainLooper()).postDelayed({
             isViewsVisible(false)
-            
-            ViewsAnimation.revealButton(signInButton, textSignIn, revealView, requireContext())
-            ViewsAnimation.fadeOutProgressDialog(progressBarSignIn)
+
+            requireActivity().window.statusBarColor = resources.getColor(
+                R.color.background_about_app,
+                requireContext().resources.newTheme()
+            )
+
+            ViewsAnimation.revealButton(
+                binding.signInButton,
+                binding.textSignIn,
+                binding.reveal,
+                requireContext()
+            )
+            ViewsAnimation.fadeOutProgressDialog(binding.progressBarSignIn)
 
             delayedStartAdministratorActivity()
-        }
+        }, 2000)
+
     }
 
     private fun nextActionWithoutActivityChange() {
-        val signInButton = requireActivity().findViewById<FrameLayout>(R.id.sign_in_button)
-        val textSignIn = requireActivity().findViewById<TextView>(R.id.text_sign_in)
-        val progressBarSignIn = requireActivity().findViewById<ProgressBar>(R.id.progress_bar_sign_in)
+        Handler(Looper.getMainLooper()).postDelayed({
+            ViewsAnimation.fadeOutProgressDialog(binding.progressBarSignIn)
+            ViewsAnimation.resetButton(binding.signInButton, binding.textSignIn, requireContext())
 
-        userScope.launch {
-            delay(2000)
-            
-            ViewsAnimation.fadeOutProgressDialog(progressBarSignIn)
-            ViewsAnimation.resetButton(signInButton, textSignIn, requireContext())
-            
             incorrectAuthorizationDataAnimation()
-        }
+        }, 2000)
     }
 
     private fun isViewsVisible(visibility: Boolean) {
-        val userLogin = requireActivity().findViewById<EditText>(R.id.user_login)
-        val userPassword = requireActivity().findViewById<EditText>(R.id.user_password)
-
         if (visibility) {
-            userLogin.visibility = View.VISIBLE
-            userPassword.visibility = View.VISIBLE
+            binding.userLogin.visibility = View.VISIBLE
+            binding.userPassword.visibility = View.VISIBLE
+            binding.toHomePageFromAuthorizationPage.visibility = View.VISIBLE
+            binding.rememberAccount.visibility = View.VISIBLE
+            binding.signinMessage.visibility = View.VISIBLE
         } else {
-            userLogin.visibility = View.INVISIBLE
-            userPassword.visibility = View.INVISIBLE
+            binding.userLogin.visibility = View.INVISIBLE
+            binding.userPassword.visibility = View.INVISIBLE
+            binding.toHomePageFromAuthorizationPage.visibility = View.INVISIBLE
+            binding.rememberAccount.visibility = View.INVISIBLE
+            binding.signinMessage.visibility = View.INVISIBLE
         }
     }
 
     private fun signIn() {
-        val signInButton = requireActivity().findViewById<FrameLayout>(R.id.sign_in_button)
-        val userPasswordLine = requireActivity().findViewById<EditText>(R.id.user_password)
-        signInButton.setOnClickListener {
-            userScope.launch {
-                authorizationProcess()
-                userPasswordLine.clearFocus()
-            }
+        binding.signInButton.setOnClickListener {
+            authorizationProcess()
         }
     }
 
-    private suspend fun isAdministratorAccount(accountEmail: String): Boolean {
-        val currentAccount = SignInActivity.accountsViewModel.getAccountEmail(accountEmail)
-
-        return currentAccount.component1().accountRole
+    private fun isAdministratorAccount(): Boolean {
+        return accountsList.component1().accountRole
     }
 
-    private suspend fun isPasswordAndAccountEmailCorrect(
+    private fun isPasswordAndAccountEmailCorrect(
         accountEmail: String,
-        accountPassword: String): Boolean {
-        val currentAccount = SignInActivity.accountsViewModel.getAccountEmail(accountEmail)
+        accountPassword: String
+    ): Boolean {
+        viewModel.accountsLiveData.observe(viewLifecycleOwner) { accounts ->
+            accountsList = accounts
+        }
+
         var isCorrect = false
-        
-        for (account in currentAccount) 
+
+        for (account in accountsList)
             if (accountEmail == account.accountEmail
-            && accountPassword == account.hashPassword) 
+                && accountPassword == account.hashPassword
+            )
                 isCorrect = true
-        
+
         return isCorrect
     }
 
-    private suspend fun authorizationProcess() {
-        val accountLoginLine = requireActivity().findViewById<EditText>(R.id.user_login)
-        val accountPasswordLine = requireActivity().findViewById<EditText>(R.id.user_password)
-
-        val accountLogin = accountLoginLine.text.toString()
-        val accountPassword = accountPasswordLine.text.toString()
+    private fun authorizationProcess() {
+        val accountLogin = binding.userLogin.text.toString()
+        val accountPassword = binding.userPassword.text.toString()
 
         if (isPasswordAndAccountEmailCorrect(accountLogin, accountPassword)) {
-            if (isAdministratorAccount(accountLogin)) {
+            if (isAdministratorAccount()) {
                 authorizationProcessButtonAnimation()
                 nextActionWithActivityChange()
             } else {
@@ -176,27 +187,22 @@ class AuthorizationFragment : Fragment() {
     }
 
     private fun incorrectAuthorizationDataAnimation() {
-        val accountLoginLine = requireActivity().findViewById<EditText>(R.id.user_login)
-        val accountPasswordLine = requireActivity().findViewById<EditText>(R.id.user_password)
-        val incorrectMessage = requireActivity().findViewById<TextView>(R.id.message)
+        binding.message.setText(R.string.incorrect_message)
 
-        incorrectMessage.setText(R.string.incorrect_message)
+        ViewsAnimation.messageShowAnimation(binding.message, requireContext())
+        ViewsAnimation.propertyAnimationShow(binding.userLogin, requireContext())
+        ViewsAnimation.propertyAnimationShow(binding.userPassword, requireContext())
 
-        ViewsAnimation.messageShowAnimation(incorrectMessage, requireContext())
-        ViewsAnimation.propertyAnimationShow(accountLoginLine, requireContext())
-        ViewsAnimation.propertyAnimationShow(accountPasswordLine, requireContext())
-
-        ViewsAnimation.messageHideAnimation(incorrectMessage, requireContext())
-        ViewsAnimation.propertyAnimationHide(accountLoginLine, requireContext())
-        ViewsAnimation.propertyAnimationHide(accountPasswordLine, requireContext())
+        ViewsAnimation.messageHideAnimation(binding.message, requireContext())
+        ViewsAnimation.propertyAnimationHide(binding.userLogin, requireContext())
+        ViewsAnimation.propertyAnimationHide(binding.userPassword, requireContext())
     }
 
     private fun authorizationProcessButtonAnimation() {
-        val signInButton = requireActivity().findViewById<FrameLayout>(R.id.sign_in_button)
-        val textSignIn = requireActivity().findViewById<TextView>(R.id.text_sign_in)
-        val progressBarSignIn = requireActivity().findViewById<ProgressBar>(R.id.progress_bar_sign_in)
-
-        ViewsAnimation.animateButtonWidth(signInButton, requireContext())
-        ViewsAnimation.fadeOutTextAndShowProgressDialog(textSignIn, progressBarSignIn)
+        ViewsAnimation.animateButtonWidth(binding.signInButton, requireContext())
+        ViewsAnimation.fadeOutTextAndShowProgressDialog(
+            binding.textSignIn,
+            binding.progressBarSignIn
+        )
     }
 }
