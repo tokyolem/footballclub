@@ -10,6 +10,7 @@
 
     <!-- Custom colors. -->
     <color name="window_background">#40cecccd</color>
+    <color name="window_background_2">#e8e8e8</color>
     <color name="transparent">#00000000</color>
     <color name="AppBarColor">#8dd7ae</color>
     <color name="incorrect_data">#b80f0a</color>
