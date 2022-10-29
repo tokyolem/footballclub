@@ -26,6 +26,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -33,11 +34,13 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
         <activity
             android:name=".AdministratorActivity"
             android:exported="true"
             android:theme="@style/Theme.FootballClub.Admin"
-            android:screenOrientation="locked">
+            android:screenOrientation="locked"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
