@@ -17,6 +17,8 @@ class AccountsRepository @Inject constructor(
 
     fun getAccountByEmail(accountEmail: String) = accountsDao.getAccountByEmail(accountEmail)
 
+    fun getAccountById(accountId: Long) = accountsDao.getAccountById(accountId)
+
     @WorkerThread
     suspend fun getAccountEmail(accountEmail: String): List<Accounts> =
         accountsDao.getAccountEmail(accountEmail)
@@ -24,6 +26,11 @@ class AccountsRepository @Inject constructor(
     @WorkerThread
     suspend fun insertAccount(account: Accounts) {
         accountsDao.insertAccount(account)
+    }
+
+    @WorkerThread
+    suspend fun updateAccount(account: Accounts) {
+        accountsDao.updateAccount(account)
     }
 
 }

@@ -5,11 +5,8 @@ import androidx.lifecycle.*
 import com.ftclub.footballclub.basic.room.accounts.AccountsDatabase
 import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
 import com.ftclub.footballclub.basic.room.accounts.repository.AccountsRepository
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class AccountsViewModel(application: Application): AndroidViewModel(application) {
@@ -18,6 +15,7 @@ class AccountsViewModel(application: Application): AndroidViewModel(application)
 
     val accountsLiveData = MutableLiveData<List<Accounts>>()
     val accountByEmail = MutableLiveData<Accounts>()
+    val accountById = MutableLiveData<Accounts>()
 
     init {
         val accountsDao = AccountsDatabase.getDatabase(application).accountsDao()
@@ -37,10 +35,24 @@ class AccountsViewModel(application: Application): AndroidViewModel(application)
         }
     }
 
+    fun getAccountById(accountId: Long) {
+        viewModelScope.launch {
+            accountsRepository.getAccountById(accountId).collect { account ->
+                accountById.postValue(account)
+            }
+        }
+    }
+
     suspend fun getAccountEmail(accountEmail: String): List<Accounts> =
         viewModelScope.async {
         return@async accountsRepository.getAccountEmail(accountEmail)
     }.await()
+
+    fun updateAccount(account: Accounts) {
+        viewModelScope.launch(Dispatchers.IO) {
+            accountsRepository.updateAccount(account)
+        }
+    }
 
     fun insertAccount(account: Accounts) {
         viewModelScope.launch(Dispatchers.IO) {
