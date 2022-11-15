@@ -1,34 +1,21 @@
-package com.ftclub.footballclub.ui.administratorActivity.accounts
+package com.ftclub.footballclub.ui.administratorActivity.accounts.recycler
 
-import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
-import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.DiffUtil
 import com.ftclub.footballclub.R
 import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
-import com.ftclub.footballclub.basic.room.accounts.viewModel.AccountsViewModel
 import com.ftclub.footballclub.databinding.AccountsCardBinding
-import com.ftclub.footballclub.databinding.FragmentAccountsBinding
-import com.ftclub.footballclub.ui.BaseViewHolder
-import com.ftclub.footballclub.ui.ItemFingerprint
-import com.ftclub.footballclub.ui.ViewsAnimation
-import com.ftclub.footballclub.ui.dialog.CustomDialogFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
+import com.ftclub.footballclub.ui.adapter.BaseViewHolder
+import com.ftclub.footballclub.ui.adapter.Item
+import com.ftclub.footballclub.ui.adapter.ItemFingerprint
 
 class AccountFingerprint(
-    private val fragmentBinding: FragmentAccountsBinding,
-    private val context: Context,
-    private val activity: FragmentActivity,
-    private val dbViewModel: AccountsViewModel
+    val action: (item: Accounts, view: View) -> Unit
 ) : ItemFingerprint<AccountsCardBinding, Accounts> {
 
-    override fun isRelativeItem(item: Accounts) = true
+    override fun isRelativeItem(item: Item) = item is Accounts
 
     override fun getLayoutId() = R.layout.accounts_card
 
@@ -37,16 +24,24 @@ class AccountFingerprint(
         parent: ViewGroup
     ): BaseViewHolder<AccountsCardBinding, Accounts> {
         val binding = AccountsCardBinding.inflate(layoutInflater, parent, false)
-        return AccountsViewHolder(binding, fragmentBinding, context, activity, dbViewModel)
+        return AccountsViewHolder(binding, action)
+    }
+
+    override fun getDiffUtil() = diffUtil
+
+    private val diffUtil = object : DiffUtil.ItemCallback<Accounts>() {
+
+        override fun areContentsTheSame(oldItem: Accounts, newItem: Accounts) =
+            oldItem.id == newItem.id
+
+        override fun areItemsTheSame(oldItem: Accounts, newItem: Accounts) =
+            oldItem == newItem
     }
 }
 
 class AccountsViewHolder(
     binding: AccountsCardBinding,
-    private val fragmentBinding: FragmentAccountsBinding,
-    private val context: Context,
-    private val activity: FragmentActivity,
-    private val dbViewModel: AccountsViewModel
+    val action: (item: Accounts, view: View) -> Unit
 ) : BaseViewHolder<AccountsCardBinding, Accounts>(binding) {
 
     override fun onBind(item: Accounts) {
@@ -58,98 +53,19 @@ class AccountsViewHolder(
         binding.accountEmail.text = item.accountEmail
         binding.regDate.text = "Дата записи: ${item.dateTime}"
 
-        if (item.firstName.isEmpty()) binding.userName.text = "<Не указано>"
-        else binding.userName.text = item.firstName
-
-        if (item.playerPosition.isEmpty()) binding.position.text = "<Не указано>"
-        else binding.position.text = item.playerPosition
+        if (item.firstName.isEmpty()){
+            binding.userName.text = "<Не указано>"
+            binding.position.text = "<Не указано>"
+        } else {
+            binding.userName.text = item.firstName
+            binding.position.text = item.playerPosition
+        }
     }
 
     private fun onMoreButtonClick(item: Accounts) {
         binding.more.setOnClickListener {
-            openPopupActionsMenu(item)
+            action.invoke(item, binding.more)
         }
     }
 
-    private fun openPopupActionsMenu(item: Accounts) {
-        val actionsMenu = PopupMenu(context, binding.more)
-        actionsMenu.menuInflater.inflate(R.menu.account_action_menu, actionsMenu.menu)
-
-        actionsMenu.setOnMenuItemClickListener { menuItem ->
-            if (menuItem.itemId == R.id.edit_account) {
-                openEditBottomSheet(item)
-                dimmerVisibility(View.VISIBLE)
-                bottomNavViewVisibility(View.GONE)
-            } else {
-                CustomDialogFragment(R.string.delete_title, R.string.delete_message) {
-                    dbViewModel.deleteAccount(item.id!!)
-                }.show(activity.supportFragmentManager, "custom_dialog")
-
-            }
-            true
-        }
-
-        try {
-            val popup = PopupMenu::class.java.getDeclaredField("mPopup")
-            popup.isAccessible = true
-            val menu = popup.get(actionsMenu)
-            menu.javaClass
-                .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
-                .invoke(menu, true)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        } finally {
-            actionsMenu.show()
-            bottomSheetCallback()
-        }
-    }
-
-    private fun bottomSheetCallback() {
-        BottomSheetBehavior.from(fragmentBinding.bottomSheetAccounts)
-            .addBottomSheetCallback(object : BottomSheetCallback() {
-                override fun onStateChanged(bottomSheet: View, newState: Int) {
-                    if (BottomSheetBehavior.from(fragmentBinding.bottomSheetAccounts).state
-                        == BottomSheetBehavior.STATE_COLLAPSED
-                    ) {
-                        dimmerVisibility(View.GONE)
-                        bottomNavViewVisibility(View.VISIBLE)
-                    }
-                }
-
-                override fun onSlide(bottomSheet: View, slideOffset: Float) {}
-            })
-    }
-
-    private fun openEditBottomSheet(item: Accounts) {
-        setAccountContentToBottomSheet(item)
-        BottomSheetBehavior.from(fragmentBinding.bottomSheetAccounts).apply {
-            this.state = BottomSheetBehavior.STATE_EXPANDED
-        }
-    }
-
-    private fun dimmerVisibility(visibility: Int) {
-        when (visibility) {
-            View.VISIBLE ->
-                ViewsAnimation.viewShowAnimation(
-                    fragmentBinding.translucentBlackBackground,
-                    context
-                )
-            View.GONE -> ViewsAnimation.viewHideAnimation(
-                fragmentBinding.translucentBlackBackground,
-                context
-            )
-        }
-
-        fragmentBinding.translucentBlackBackground.visibility = visibility
-
-    }
-
-    private fun bottomNavViewVisibility(visibility: Int) {
-        activity.findViewById<BottomNavigationView>(R.id.nav_view).visibility = visibility
-    }
-
-    private fun setAccountContentToBottomSheet(item: Accounts) {
-        fragmentBinding.accountEditEmail.setText(item.accountEmail)
-        fragmentBinding.accountEditPassword.setText(item.hashPassword)
-    }
 }
