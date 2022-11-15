@@ -3,18 +3,13 @@
 
     <item
         android:id="@+id/navigation_accounts"
-        android:icon="@drawable/ic_user"
+        android:icon="@drawable/ic_acc_circle"
         android:title="@string/accounts"/>
 
     <item
         android:id="@+id/navigation_players"
         android:icon="@drawable/ic_player"
         android:title="@string/players"/>
-
-    <item
-        android:id="@+id/navigation_add"
-        android:icon="@drawable/ic_add_account"
-        android:title="@string/add_account"/>
 
     <item
         android:id="@+id/navigation_about_app"

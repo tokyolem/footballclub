@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_accounts"
-        android:name="com.ftclub.footballclub.ui.accounts.AccountsFragment"
+        android:name="com.ftclub.footballclub.ui.administratorActivity.accounts.AccountsFragment"
         android:label="@string/accounts"
         app:enterAnim="@anim/slide_in_right"
         app:exitAnim="@anim/slide_out_right"
@@ -15,16 +15,16 @@
         app:popExitAnim="@anim/slide_out_left"
         tools:layout="@layout/fragment_accounts">
         <action
-            android:id="@+id/action_navigation_accounts_to_searchFragment"
-            app:destination="@id/searchFragment"
+            android:id="@+id/action_navigation_accounts_to_navigation_add"
+            app:destination="@id/navigation_add"
             app:enterAnim="@anim/slide_in_down"
             app:exitAnim="@anim/slide_out_down"
             app:popEnterAnim="@anim/slide_in_up"
-            app:popExitAnim="@anim/slide_out_up" />
+            app:popExitAnim="@anim/slide_out_up"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_players"
-        android:name="com.ftclub.footballclub.ui.players.PlayersFragment"
+        android:name="com.ftclub.footballclub.ui.administratorActivity.players.PlayersFragment"
         android:label="@string/players"
         app:enterAnim="@anim/slide_in_right"
         app:exitAnim="@anim/slide_out_right"
@@ -38,21 +38,21 @@
             app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_left" />
-        <action
-            android:id="@+id/action_navigation_players_to_searchFragment"
-            app:destination="@id/searchFragment"
-            app:enterAnim="@anim/slide_in_down"
-            app:exitAnim="@anim/slide_out_down"
-            app:popEnterAnim="@anim/slide_in_up"
-            app:popExitAnim="@anim/slide_out_up" />
         <argument
             android:name="accountsList"
             app:argType="java.io.Serializable"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_navigation_players_to_navigation_add"
+            app:destination="@id/navigation_add"
+            app:enterAnim="@anim/slide_in_down"
+            app:exitAnim="@anim/slide_out_down"
+            app:popEnterAnim="@anim/slide_in_up"
+            app:popExitAnim="@anim/slide_out_up"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_add"
-        android:name="com.ftclub.footballclub.ui.add.AddFragment"
+        android:name="com.ftclub.footballclub.ui.administratorActivity.add.AddFragment"
         android:label="@string/add_account"
         app:enterAnim="@anim/slide_in_right"
         app:exitAnim="@anim/slide_out_right"
@@ -76,7 +76,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_about_app"
-        android:name="com.ftclub.footballclub.ui.aboutApp.AboutAppFragment"
+        android:name="com.ftclub.footballclub.ui.administratorActivity.aboutApp.AboutAppFragment"
         android:label="@string/about_app"
         app:enterAnim="@anim/slide_in_right"
         app:exitAnim="@anim/slide_out_right"
@@ -85,7 +85,7 @@
         tools:layout="@layout/fragment_about_app" />
     <fragment
         android:id="@+id/addInformationFragment"
-        android:name="com.ftclub.footballclub.ui.add.AddInformationFragment"
+        android:name="com.ftclub.footballclub.ui.administratorActivity.add.AddInformationFragment"
         android:label="fragment_add_information"
         tools:layout="@layout/fragment_add_information">
         <action
@@ -95,44 +95,17 @@
             app:exitAnim="@anim/slide_out_right"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_left" />
-        <action
-            android:id="@+id/action_addInformationFragment_to_addAgeFragment"
-            app:destination="@id/addAgeFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_right"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_left" />
         <argument
             android:name="reg_data"
             app:argType="string[]" />
-    </fragment>
-    <fragment
-        android:id="@+id/addAgeFragment"
-        android:name="com.ftclub.footballclub.ui.add.AddAgeFragment"
-        android:label="fragment_add_age"
-        tools:layout="@layout/fragment_add_age">
         <action
-            android:id="@+id/action_addAgeFragment_to_addInformationFragment"
-            app:destination="@id/addInformationFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_right"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_left" />
-        <action
-            android:id="@+id/action_addAgeFragment_to_navigation_accounts"
-            app:destination="@id/navigation_accounts"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_right"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_left" />
-        <argument
-            android:name="reg_data"
-            app:argType="string[]" />
+            android:id="@+id/action_addInformationFragment_to_navigation_accounts"
+            app:destination="@id/navigation_accounts" />
     </fragment>
 
     <fragment
         android:id="@+id/playerPageFragment"
-        android:name="com.ftclub.footballclub.ui.players.PlayerPageFragment"
+        android:name="com.ftclub.footballclub.ui.administratorActivity.players.playerPageP.PlayerPageFragment"
         android:label="fragment_player_page"
         tools:layout="@layout/fragment_player_page">
         <action
@@ -144,7 +117,7 @@
             app:popExitAnim="@anim/slide_out_left" />
         <argument
             android:name="accountId"
-            app:argType="integer" />
+            app:argType="long" />
         <action
             android:id="@+id/action_playerPageFragment_to_playerEditFragment"
             app:destination="@id/playerEditFragment"
@@ -156,7 +129,7 @@
 
     <fragment
         android:id="@+id/playerEditFragment"
-        android:name="com.ftclub.footballclub.ui.players.PlayerEditFragment"
+        android:name="com.ftclub.footballclub.ui.administratorActivity.players.editFragment.PlayerEditFragment"
         android:label="fragment_player_edit"
         tools:layout="@layout/fragment_player_edit">
 
@@ -168,35 +141,4 @@
             app:argType="integer" />
     </fragment>
 
-    <fragment
-        android:id="@+id/searchFragment"
-        android:name="com.ftclub.footballclub.ui.search.SearchFragment"
-        android:label="fragment_search"
-        tools:layout="@layout/fragment_search">
-        <action
-            android:id="@+id/action_searchFragment_to_navigation_players"
-            app:destination="@id/navigation_players"
-            app:enterAnim="@anim/slide_in_up"
-            app:exitAnim="@anim/slide_out_down"
-            app:popEnterAnim="@anim/slide_in_down"
-            app:popExitAnim="@anim/slide_out_up" />
-        <action
-            android:id="@+id/action_searchFragment_to_navigation_accounts"
-            app:destination="@id/navigation_accounts"
-            app:enterAnim="@anim/slide_in_up"
-            app:exitAnim="@anim/slide_out_down"
-            app:popEnterAnim="@anim/slide_in_down"
-            app:popExitAnim="@anim/slide_out_up" />
-
-        <argument
-            android:name="searchType"
-            app:argType="string" />
-        <action
-            android:id="@+id/action_searchFragment_to_playerPageFragment"
-            app:destination="@id/playerPageFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_right"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_left" />
-    </fragment>
 </navigation>

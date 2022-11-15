@@ -1,6 +1,7 @@
 package com.ftclub.footballclub.ui
 
 import android.animation.Animator
+import android.animation.Animator.AnimatorListener
 import android.animation.AnimatorListenerAdapter
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
@@ -14,15 +15,18 @@ import android.util.Log
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
+import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import com.ftclub.footballclub.R
+import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -31,7 +35,44 @@ import kotlin.math.max
 
 object ViewsAnimation {
 
-    private val userScope = CoroutineScope(Dispatchers.Main)
+    const val SCALE_ANIMATION = 1
+    const val ALPHA_ANIMATION = 2
+
+    fun turnIn(context: Context, v: View) {
+        val turnAnim = AnimationUtils.loadAnimation(context, R.anim.turn_in)
+
+        turnAnim.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(p0: Animation?) {}
+            override fun onAnimationRepeat(p0: Animation?) {}
+
+            override fun onAnimationEnd(p0: Animation?) {
+                (v as MaterialButton).icon = ResourcesCompat.getDrawable(
+                    context.resources, R.drawable.ic_baseline_arrow_drop_up_24,
+                    context.resources.newTheme()
+                )
+            }
+        })
+
+        v.startAnimation(turnAnim)
+    }
+
+    fun turnOut(context: Context, v: View) {
+        val turnAnim = AnimationUtils.loadAnimation(context, R.anim.turn_out)
+
+        turnAnim.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(p0: Animation?) {}
+            override fun onAnimationRepeat(p0: Animation?) {}
+
+            override fun onAnimationEnd(p0: Animation?) {
+                (v as MaterialButton).icon = ResourcesCompat.getDrawable(
+                    context.resources, R.drawable.ic_baseline_arrow_drop_down_24,
+                    context.resources.newTheme()
+                )
+            }
+        })
+
+        v.startAnimation(turnAnim)
+    }
 
     fun messageShowAnimation(textView: TextView, context: Context) {
         val animationMessageHide = AnimationUtils.loadAnimation(context, R.anim.alpha_message_begin)
@@ -46,16 +87,6 @@ object ViewsAnimation {
             textView.startAnimation(animationMessageHide)
             textView.visibility = View.INVISIBLE
         }, 2000)
-    }
-
-    fun viewTextShowAnimation(view: View, context: Context) {
-        val animation = AnimationUtils.loadAnimation(context, R.anim.alpha_message_begin)
-        view.startAnimation(animation)
-    }
-
-    fun viewTextHideAnimation(view: View, context: Context) {
-        val animation = AnimationUtils.loadAnimation(context, R.anim.alpha_message_end)
-        view.startAnimation(animation)
     }
 
     fun viewShowAnimation(view: View, context: Context) {
@@ -80,30 +111,6 @@ object ViewsAnimation {
         val animation = AnimationUtils.loadAnimation(context, R.anim.scale_down)
         view.startAnimation(animation)
         view.visibility = View.INVISIBLE
-    }
-
-    fun arrowCardDownToUpAnimation(view: View, context: Context) {
-        val animationFrameLayoutDown = AnimationUtils.loadAnimation(context, R.anim.alpha_arrow_end)
-        view.startAnimation(animationFrameLayoutDown)
-        view.visibility = View.INVISIBLE
-        view.background = ContextCompat.getDrawable(context, R.drawable.ic_arrow_up)
-
-        val animationFrameLayoutUp =
-            AnimationUtils.loadAnimation(context, R.anim.alpha_message_begin)
-        view.startAnimation(animationFrameLayoutUp)
-        view.visibility = View.VISIBLE
-    }
-
-    fun arrowCardUpToDownAnimation(view: View, context: Context) {
-        val animationFrameLayoutDown = AnimationUtils.loadAnimation(context, R.anim.alpha_arrow_end)
-        view.startAnimation(animationFrameLayoutDown)
-        view.visibility = View.INVISIBLE
-        view.background = ContextCompat.getDrawable(context, R.drawable.ic_arrow_down)
-
-        val animationFrameLayoutUp =
-            AnimationUtils.loadAnimation(context, R.anim.alpha_message_begin)
-        view.startAnimation(animationFrameLayoutUp)
-        view.visibility = View.VISIBLE
     }
 
     fun propertyAnimationShow(editTextLine: EditText, context: Context) {
@@ -160,12 +167,13 @@ object ViewsAnimation {
 
         reveal.duration = 400
         reveal.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
+            override fun onAnimationEnd(animation: Animator) {
+                super.onAnimationEnd(animation)
                 reset(animation)
             }
 
             private fun reset(animation: Animator?) {
-                super.onAnimationEnd(animation)
+                super.onAnimationEnd(animation!!)
                 revealView.visibility = View.INVISIBLE
                 textView.visibility = View.VISIBLE
                 textView.alpha = 1f
@@ -181,7 +189,7 @@ object ViewsAnimation {
     fun animateButtonWidth(frameLayout: FrameLayout, context: Context) {
         val anim = ValueAnimator.ofInt(frameLayout.measuredWidth, getFabWidth(context).toInt())
         anim.addUpdateListener { animation ->
-            val value = animation!!.animatedValue as Int
+            val value = animation.animatedValue as Int
             val layoutParams: ViewGroup.LayoutParams = frameLayout.layoutParams
             layoutParams.width = value
             frameLayout.requestLayout()
@@ -196,15 +204,13 @@ object ViewsAnimation {
             .indeterminateDrawable
             .colorFilter =
             BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-                Color.parseColor("#ffffff"),
+                Color.parseColor("#000000"),
                 BlendModeCompat.SRC_IN
             )
         progressBar.visibility = View.VISIBLE
     }
 
     fun fadeOutTextAndShowProgressDialog(textView: TextView, progressBar: ProgressBar) {
-//        val textSignIn = requireActivity().findViewById<TextView>(R.id.text_sign_in)
-
         textView.animate().alpha(0f)
             .setDuration(250)
             .setListener(object : AnimatorListenerAdapter() {
@@ -218,7 +224,7 @@ object ViewsAnimation {
     fun fadeOutProgressDialog(progressBar: ProgressBar) {
         progressBar.animate().alpha(0f).setDuration(250)
             .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
+                override fun onAnimationEnd(animation: Animator) {
                     super.onAnimationEnd(animation)
                 }
             }).start()

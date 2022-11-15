@@ -1,50 +1,24 @@
 package com.ftclub.footballclub.ui.dialog
 
+import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.LinearLayout.LayoutParams
 import androidx.annotation.StringRes
 import androidx.fragment.app.DialogFragment
-import com.ftclub.footballclub.databinding.FragmentDialogBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class CustomDialogFragment(
     @StringRes private val title: Int,
     @StringRes private val message: Int,
-    val action: (Unit) -> Unit
+    private val actionPositive: (Unit) -> Unit,
+    private val actionNegative: ((Unit) -> Unit)?
 ) : DialogFragment() {
 
-    private lateinit var _binding: FragmentDialogBinding
-    private val binding get() = _binding
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentDialogBinding.inflate(inflater, container, false)
-
-        return binding.root
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return MaterialAlertDialogBuilder(requireContext())
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("Ок") { _, _ -> actionPositive.invoke(Unit) }
+            .setNegativeButton("Отменить") { _, _ -> actionNegative?.invoke(Unit)}
+            .create()
     }
-
-    override fun onStart() {
-        super.onStart()
-        binding.title.setText(title)
-        binding.message.setText(message)
-
-        binding.positive.setOnClickListener {
-            action.invoke(Unit)
-            dismiss()
-        }
-        binding.negative.setOnClickListener {
-            dismiss()
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        dialog?.window?.setLayout(950, LayoutParams.WRAP_CONTENT)
-    }
-
 }

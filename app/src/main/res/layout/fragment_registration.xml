@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.registration.RegistrationFragment">
+    android:background="@color/background"
+    tools:context=".ui.signInActivity.registration.RegistrationFragment">
 
     <FrameLayout
         android:id="@+id/to_home_page_from_registration_page"
@@ -23,62 +24,83 @@
             android:layout_width="20dp"
             android:layout_height="15dp"
             android:layout_gravity="center"
-            android:src="@drawable/ic_back"/>
+            android:src="@drawable/ic_back" />
     </FrameLayout>
 
-    <EditText
-        android:id="@+id/user_new_password"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/user_password"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="15dp"
-        android:drawablePadding="12dp"
-        android:ems="10"
         android:hint="@string/password"
-        android:inputType="textPassword"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
+        app:counterEnabled="true"
+        app:counterMaxLength="30"
+        app:endIconMode="password_toggle"
+        app:helperTextTextColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_new_email" />
+        app:layout_constraintTop_toBottomOf="@+id/user_login">
 
-    <EditText
-        android:id="@+id/user_new_email"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/user_new_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:maxLength="31" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/user_login"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="196dp"
+        android:layout_marginTop="140dp"
         android:layout_marginEnd="15dp"
-        android:drawablePadding="12dp"
-        android:ems="10"
         android:hint="@string/e_mail"
-        android:inputType="textEmailAddress"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
+        app:counterEnabled="true"
+        app:counterMaxLength="30"
+        app:endIconMode="clear_text"
+        app:helperTextTextColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <EditText
-        android:id="@+id/user_repeat_password"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/user_new_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:maxLength="31" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/repeat_password"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="15dp"
-        android:drawablePadding="12dp"
-        android:ems="10"
-        android:hint="@string/repeat_password"
-        android:inputType="textPassword"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
+        android:hint="@string/e_mail"
+        app:counterEnabled="true"
+        app:counterMaxLength="30"
+        app:endIconMode="password_toggle"
+        app:helperTextTextColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_new_password" />
+        app:layout_constraintTop_toBottomOf="@+id/user_password">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/user_repeat_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:maxLength="31" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:id="@+id/message_registration"
@@ -92,7 +114,7 @@
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_repeat_password" />
+        app:layout_constraintTop_toBottomOf="@+id/repeat_password" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/sign_up_button"
@@ -100,27 +122,28 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:borderWidth="0dp"
-        android:elevation="10dp"
-        android:src="@drawable/ic_baseline_navigate_next_24"
         android:backgroundTint="@color/background_about_app"
+        android:clickable="true"
+        android:elevation="10dp"
+        android:focusable="true"
+        android:src="@drawable/ic_baseline_navigate_next_24"
+        app:borderWidth="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white" />
 
     <TextView
         android:id="@+id/reg_information"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
         android:layout_marginStart="15dp"
-        android:textStyle="bold"
+        android:layout_marginEnd="15dp"
         android:fontFamily="sans-serif-light"
-        android:text="@string/reg_information"
         android:gravity="start"
+        android:text="@string/reg_information"
         android:textSize="28sp"
-        app:layout_constraintBottom_toTopOf="@+id/user_new_email"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/user_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -131,12 +154,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
-        android:layout_marginBottom="35dp"
+        android:layout_marginBottom="20dp"
         android:fontFamily="sans-serif-light"
         android:gravity="start"
         android:text="@string/reg_information_2"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/user_new_email"
+        app:layout_constraintBottom_toTopOf="@+id/user_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reg_information" />

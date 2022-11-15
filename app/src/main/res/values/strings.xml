@@ -52,7 +52,7 @@
     <string name="save_changes">Сохранить</string>
     <string name="cancel_changes">Отмена</string>
     <string name="ban">Заблокировать</string>
-    <string name="add_new_account">Добавьте новый аккаунт</string>
+    <string name="add_new_account">Добавление нового аккаунта</string>
     <string name="account_add_message">В вспылвающем диалоговом окне выберите варинат добавления.</string>
     <string name="full_account">Подробное добавление</string>
     <string name="half_account">Частичное добавление</string>
@@ -80,5 +80,18 @@
     <string name="edit_message">Применить изменения?</string>
     <string name="sigh_out_title">Выход</string>
     <string name="sign_out_message">Вы уверены, что хотите выйти?</string>
+    <string name="sign_out">Выйти</string>
+    <string name="fc_name">ФК \"Химик\"</string>
+
+    <string name="admin_inf">Главный тренер команды, начал карьеру футболиста в марсельском «Олимпике». В роли главного тренера команды выступает с 1900 года.</string>
+    <string name="set_birthday">Указать дату рождения</string>
+    <string name="apply">Подтвердить</string>
+    <string name="first_name_nec">Имя*</string>
+    <string name="last_name_nec">Фамилия*</string>
+    <string name="phone_number_nec">Номер телефона*</string>
+    <string name="player_info">Информация об игроке</string>
+    <string name="edit_page_title">Редактирование данных аккаунта</string>
+    <string name="edit_birhday">Редактировать дату рождения</string>
+    <string name="profile">Профиль</string>
 
 </resources>

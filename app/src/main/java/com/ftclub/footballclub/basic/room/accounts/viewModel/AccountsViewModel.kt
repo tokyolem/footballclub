@@ -20,6 +20,7 @@ class AccountsViewModel(application: Application): AndroidViewModel(application)
     init {
         val accountsDao = AccountsDatabase.getDatabase(application).accountsDao()
         accountsRepository = AccountsRepository(accountsDao)
+
         viewModelScope.launch {
             accountsRepository.getAccountsFlow().collect { items ->
                 accountsLiveData.postValue(items)
