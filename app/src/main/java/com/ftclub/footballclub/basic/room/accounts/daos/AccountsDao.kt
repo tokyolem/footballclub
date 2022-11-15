@@ -2,6 +2,7 @@ package com.ftclub.footballclub.basic.room.accounts.daos
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.ftclub.footballclub.basic.room.accounts.AccountsDatabase
@@ -23,7 +24,7 @@ interface AccountsDao {
     @Query("SELECT * FROM ${AccountsDatabase.ACCOUNTS_TABLE_NAME} WHERE account_email = :accountEmail")
     suspend fun getAccountEmail(accountEmail: String): List<Accounts>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAccount(account: Accounts)
 
     @Update
