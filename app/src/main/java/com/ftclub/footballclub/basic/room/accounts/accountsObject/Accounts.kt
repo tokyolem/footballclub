@@ -3,8 +3,8 @@ package com.ftclub.footballclub.basic.room.accounts.accountsObject
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.io.Serializable
 import com.ftclub.footballclub.basic.room.accounts.AccountsDatabase
+import com.ftclub.footballclub.ui.adapter.Item
 
 @Entity(tableName = AccountsDatabase.ACCOUNTS_TABLE_NAME)
 data class Accounts(
@@ -19,4 +19,4 @@ data class Accounts(
     @ColumnInfo(name = "last_name") val lastName: String,
     @ColumnInfo(name = "phone_number") val phoneNumber: String,
     @PrimaryKey(autoGenerate = true) val id: Long? = null
-): Serializable
+): Item
