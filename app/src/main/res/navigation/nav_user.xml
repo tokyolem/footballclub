@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_user"
+    app:startDestination="@id/nav_user_players">
+
+    <fragment
+        android:id="@+id/nav_user_players"
+        android:name="com.ftclub.footballclub.ui.userActivity.userPlayers.UserPlayersFragment"
+        android:label="Игроки"
+        tools:layout="@layout/fragment_user_players" >
+
+        <action
+            android:id="@+id/action_nav_user_players_to_nav_user_player_page"
+            app:destination="@id/nav_user_player_page"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_left"/>
+        <action
+            android:id="@+id/action_nav_user_players_to_nav_user_profile2"
+            app:destination="@id/nav_user_profile"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_left"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_user_about_app"
+        android:name="com.ftclub.footballclub.ui.userActivity.aboutApplication.AboutAppUserFragment"
+        android:label="fragment_about_app_user"
+        tools:layout="@layout/fragment_about_app_user" />
+
+    <fragment
+        android:id="@+id/nav_user_player_page"
+        android:name="com.ftclub.footballclub.ui.userActivity.userPlayers.userPlayerPage.UserPlayerPageFragment"
+        android:label="fragment_user_player_page"
+        tools:layout="@layout/fragment_user_player_page" >
+        <argument
+            android:name="playerId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_nav_user_player_page_to_nav_user_players"
+            app:destination="@id/nav_user_players"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_right"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_left"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_user_profile"
+        android:name="com.ftclub.footballclub.ui.userActivity.userProfile.UserProfileFragment"
+        android:label="fragment_user_profile"
+        tools:layout="@layout/fragment_user_profile" >
+        <argument
+            android:name="playerId"
+            app:argType="long" />
+    </fragment>
+
+</navigation>
