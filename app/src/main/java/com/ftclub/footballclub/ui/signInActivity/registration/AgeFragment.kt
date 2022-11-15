@@ -51,7 +51,7 @@ class AgeFragment : Fragment() {
     }
 
     private fun putAccountToDatabase() {
-        val arguments: com.ftclub.footballclub.ui.registration.AgeFragmentArgs by navArgs()
+        val arguments: AgeFragmentArgs by navArgs()
         val registrationData = arguments.regData
 
         dbViewModel.insertAccount(

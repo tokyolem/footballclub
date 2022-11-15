@@ -1,10 +1,10 @@
 package com.ftclub.footballclub.ui.signInActivity.home
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.ftclub.footballclub.R
@@ -24,7 +24,6 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding
 
     private lateinit var dbViewModel: AccountsViewModel
-    private lateinit var accountsList: List<Accounts>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,6 +31,11 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         dbViewModel = ViewModelProviders.of(this)[AccountsViewModel::class.java]
+
+        dbViewModel.getAccountByEmail("admin")
+        dbViewModel.accountByEmail.observe(viewLifecycleOwner) {
+            if (it == null) createDefaultAdminAccountIfNotExist()
+        }
 
         return binding.root
     }
@@ -43,11 +47,8 @@ class HomeFragment : Fragment() {
 
     private fun navigation() {
         binding.toAuthorizationPage.setOnClickListener {
+
             findNavController().navigate(R.id.action_homeFragment_to_authorizationFragment)
-            dbViewModel.accountsLiveData.observe(viewLifecycleOwner) { accounts ->
-                accountsList = accounts
-            }
-            createDefaultAdminAccountIfNotExist()
         }
 
         binding.toRegistrationPage.setOnClickListener {
@@ -55,17 +56,15 @@ class HomeFragment : Fragment() {
         }
     }
 
+
     private fun createDefaultAdminAccountIfNotExist() {
-        if (accountsList.isEmpty()) {
-            dbViewModel.insertAccount(
-                Accounts(
-                    "admin", "admin", true, DateTime.getFormatDateTime(),
-                    "Тренер", "Тренер", "23/06/2002",
-                    "Дмитрий", "Фоменок (тренер)", "+375 (29) 15-15-860"
-                )
+        dbViewModel.insertAccount(
+            Accounts(
+                "admin", "admin", true, DateTime.getFormatDateTime(),
+                resources.getString(R.string.admin_inf), "Тренер", "23/06/2002",
+                "Дмитрий", "Фоменок (тренер)", "+375 (29) 15-15-860"
             )
-        } else {
-            return
-        }
+        )
     }
+
 }

@@ -16,7 +16,8 @@ import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
 import com.ftclub.footballclub.basic.room.accounts.viewModel.AccountsViewModel
 import com.ftclub.footballclub.databinding.FragmentAuthorizationBinding
 import com.ftclub.footballclub.ui.ViewsAnimation
-import java.util.ArrayList
+import com.ftclub.footballclub.ui.userActivity.UserActivity
+import kotlin.collections.ArrayList
 
 /**
  * A simple [Fragment] subclass.
@@ -28,17 +29,18 @@ class AuthorizationFragment : Fragment() {
     private lateinit var _binding: FragmentAuthorizationBinding
     private val binding get() = _binding
 
-    private lateinit var viewModel: AccountsViewModel
-    lateinit var accountsList: List<Accounts>
+    private lateinit var dbViewModel: AccountsViewModel
+    private lateinit var accountsList: List<Accounts>
+    private lateinit var currentAccount: Accounts
 
-    private val ACCOUNTS_EXTRA_KEY = "accounts_list"
+    private val CURRENT_ACCOUNT_EXTRAS_KEY = "current_account"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAuthorizationBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProviders.of(this)[AccountsViewModel::class.java]
+        dbViewModel = ViewModelProviders.of(this)[AccountsViewModel::class.java]
 
         return binding.root
     }
@@ -46,22 +48,46 @@ class AuthorizationFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        isViewsVisible(true)
+        requireActivity().window.statusBarColor =
+            resources.getColor(R.color.background, resources.newTheme())
+
+        viewsVisibility(View.VISIBLE)
         navigation()
         signIn()
     }
 
     private fun navigation() {
-        binding.toHomePageFromAuthorizationPage.setOnClickListener {
+        binding.back.setOnClickListener {
             findNavController().navigate(R.id.action_authorizationFragment_to_homeFragment)
         }
+    }
+
+    private fun nextActionWithActivityChange() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            viewsVisibility(View.INVISIBLE)
+
+            requireActivity().window.statusBarColor = resources.getColor(
+                R.color.white,
+                requireContext().resources.newTheme()
+            )
+
+            ViewsAnimation.revealButton(
+                binding.signInButton, binding.textSignIn, binding.reveal,
+                requireContext()
+            )
+            ViewsAnimation.fadeOutProgressDialog(binding.progressBarSignIn)
+
+            if (isAccountHasAdministratorRole()) {
+                delayedStartAdministratorActivity()
+            } else {
+                delayedStartUserActivity()
+            }
+        }, 2000)
     }
 
     private fun delayedStartAdministratorActivity() {
         val intent = Intent(context, AdministratorActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
-            val serializableList = accountsList as ArrayList<Accounts>
-            putExtra(ACCOUNTS_EXTRA_KEY, serializableList as java.io.Serializable)
         }
 
         Handler(Looper.getMainLooper()).postDelayed({
@@ -69,26 +95,16 @@ class AuthorizationFragment : Fragment() {
         }, 100)
     }
 
-    private fun nextActionWithActivityChange() {
+    private fun delayedStartUserActivity() {
+        val intent = Intent(context, UserActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+            val currentAccount = binding.userLoginText.text.toString()
+            putExtra(CURRENT_ACCOUNT_EXTRAS_KEY, currentAccount)
+        }
+
         Handler(Looper.getMainLooper()).postDelayed({
-            isViewsVisible(false)
-
-            requireActivity().window.statusBarColor = resources.getColor(
-                R.color.background_about_app,
-                requireContext().resources.newTheme()
-            )
-
-            ViewsAnimation.revealButton(
-                binding.signInButton,
-                binding.textSignIn,
-                binding.reveal,
-                requireContext()
-            )
-            ViewsAnimation.fadeOutProgressDialog(binding.progressBarSignIn)
-
-            delayedStartAdministratorActivity()
-        }, 2000)
-
+            startActivity(intent)
+        }, 100)
     }
 
     private fun nextActionWithoutActivityChange() {
@@ -100,20 +116,13 @@ class AuthorizationFragment : Fragment() {
         }, 2000)
     }
 
-    private fun isViewsVisible(visibility: Boolean) {
-        if (visibility) {
-            binding.userLogin.visibility = View.VISIBLE
-            binding.userPassword.visibility = View.VISIBLE
-            binding.toHomePageFromAuthorizationPage.visibility = View.VISIBLE
-            binding.rememberAccount.visibility = View.VISIBLE
-            binding.signinMessage.visibility = View.VISIBLE
-        } else {
-            binding.userLogin.visibility = View.INVISIBLE
-            binding.userPassword.visibility = View.INVISIBLE
-            binding.toHomePageFromAuthorizationPage.visibility = View.INVISIBLE
-            binding.rememberAccount.visibility = View.INVISIBLE
-            binding.signinMessage.visibility = View.INVISIBLE
-        }
+    private fun viewsVisibility(visibility: Int) {
+        binding.userLogin.visibility = visibility
+        binding.userPassword.visibility = visibility
+        binding.back.visibility = visibility
+        binding.forgetPasswordButton.visibility = visibility
+        binding.rememberAccount.visibility = visibility
+        binding.signinMessage.visibility = visibility
     }
 
     private fun signIn() {
@@ -122,15 +131,11 @@ class AuthorizationFragment : Fragment() {
         }
     }
 
-    private fun isAdministratorAccount(): Boolean {
-        return accountsList.component1().accountRole
-    }
-
     private fun isPasswordAndAccountEmailCorrect(
         accountEmail: String,
         accountPassword: String
     ): Boolean {
-        viewModel.accountsLiveData.observe(viewLifecycleOwner) { accounts ->
+        dbViewModel.accountsLiveData.observe(viewLifecycleOwner) { accounts ->
             accountsList = accounts
         }
 
@@ -145,18 +150,24 @@ class AuthorizationFragment : Fragment() {
         return isCorrect
     }
 
+    private fun isAccountHasAdministratorRole(): Boolean {
+
+        for (account in accountsList) {
+            if (binding.userLoginText.text.toString() == account.accountEmail) {
+                currentAccount = account
+            }
+        }
+
+        return this@AuthorizationFragment.currentAccount.accountRole
+    }
+
     private fun authorizationProcess() {
-        val accountLogin = binding.userLogin.text.toString()
-        val accountPassword = binding.userPassword.text.toString()
+        val accountLogin = binding.userLoginText.text.toString()
+        val accountPassword = binding.userPasswordText.text.toString()
 
         if (isPasswordAndAccountEmailCorrect(accountLogin, accountPassword)) {
-            if (isAdministratorAccount()) {
-                authorizationProcessButtonAnimation()
-                nextActionWithActivityChange()
-            } else {
-                authorizationProcessButtonAnimation()
-                nextActionWithActivityChange()
-            }
+            authorizationProcessButtonAnimation()
+            nextActionWithActivityChange()
         } else {
             authorizationProcessButtonAnimation()
             nextActionWithoutActivityChange()
@@ -167,12 +178,12 @@ class AuthorizationFragment : Fragment() {
         binding.message.setText(R.string.incorrect_message)
 
         ViewsAnimation.messageShowAnimation(binding.message, requireContext())
-        ViewsAnimation.propertyAnimationShow(binding.userLogin, requireContext())
-        ViewsAnimation.propertyAnimationShow(binding.userPassword, requireContext())
+        ViewsAnimation.propertyAnimationShow(binding.userLoginText, requireContext())
+        ViewsAnimation.propertyAnimationShow(binding.userPasswordText, requireContext())
 
         ViewsAnimation.messageHideAnimation(binding.message, requireContext())
-        ViewsAnimation.propertyAnimationHide(binding.userLogin, requireContext())
-        ViewsAnimation.propertyAnimationHide(binding.userPassword, requireContext())
+        ViewsAnimation.propertyAnimationHide(binding.userLoginText, requireContext())
+        ViewsAnimation.propertyAnimationHide(binding.userPasswordText, requireContext())
     }
 
     private fun authorizationProcessButtonAnimation() {

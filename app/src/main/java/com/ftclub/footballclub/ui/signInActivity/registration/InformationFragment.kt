@@ -45,13 +45,13 @@ class InformationFragment : Fragment() {
             if (isInformationLinesEmpty()) {
                 informationLinesEmpty()
             } else {
-                val args: com.ftclub.footballclub.ui.registration.InformationFragmentArgs by navArgs()
+                val args: InformationFragmentArgs by navArgs()
                 val toAgeFragment =
                     args.regData + getOwnAboutInformation() + getPlayerPosition() +
                             getPlayerFirstName() + getPlayerLastName() + getPlayerPhoneNumber()
 
                 val action =
-                    com.ftclub.footballclub.ui.registration.InformationFragmentDirections.actionInformationFragmentToAgeFragment(
+                    InformationFragmentDirections.actionInformationFragmentToAgeFragment(
                         toAgeFragment
                     )
                 findNavController().navigate(action)

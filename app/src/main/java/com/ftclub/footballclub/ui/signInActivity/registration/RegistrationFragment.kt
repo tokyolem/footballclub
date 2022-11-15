@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.ftclub.footballclub.R
@@ -66,16 +67,17 @@ class RegistrationFragment : Fragment() {
         val passwordRepeat = binding.userRepeatPassword.text.toString()
 
         if (userNewEmail.isEmpty() || userNewPassword.isEmpty() || passwordRepeat.isEmpty()) {
-            registrationLinesEmptyAnimation()
+            errorMessage("Заполните все требуемые поля")
         } else {
             if (userNewPassword != passwordRepeat) {
-                registrationPasswordsNotMatchAnimation()
+                errorMessage("Пароли не совпадают!")
+                binding.userLogin.boxBackgroundColor = resources.getColor(R.color.background_about_app, resources.newTheme())
             } else if (isAccountExist(userNewEmail)) {
-                accountExistAnimation()
+                errorMessage("Аккаунт с таким email адресом уже существует!")
             } else {
                 val toInformationFragment = arrayOf(userNewEmail, userNewPassword)
                 val action =
-                    com.ftclub.footballclub.ui.registration.RegistrationFragmentDirections.actionRegistrationFragmentToInformationFragment(
+                    RegistrationFragmentDirections.actionRegistrationFragmentToInformationFragment(
                         toInformationFragment
                     )
                 findNavController().navigate(action)
@@ -83,66 +85,9 @@ class RegistrationFragment : Fragment() {
         }
     }
 
-    private fun registrationLinesEmptyAnimation() {
+    private fun errorMessage(message: String) {
         clearFocus()
-
-        val userNewEmailLine = binding.userNewEmail
-        val userNewPasswordLine = binding.userNewPassword
-        val userPasswordRepeat = binding.userRepeatPassword
-        val incorrectMessage = binding.messageRegistration
-
-        if (userNewEmailLine.text.isEmpty()) {
-            ViewsAnimation.propertyAnimationShow(userNewEmailLine, requireContext())
-            ViewsAnimation.propertyAnimationHide(userNewEmailLine, requireContext())
-            ViewsAnimation.messageHideAnimation(incorrectMessage, requireContext())
-        }
-        if (userNewPasswordLine.text.isEmpty()) {
-            ViewsAnimation.propertyAnimationShow(userNewPasswordLine, requireContext())
-            ViewsAnimation.propertyAnimationHide(userNewPasswordLine, requireContext())
-            ViewsAnimation.messageHideAnimation(incorrectMessage, requireContext())
-        }
-        if (userPasswordRepeat.text.isEmpty()) {
-            ViewsAnimation.propertyAnimationShow(userPasswordRepeat, requireContext())
-            ViewsAnimation.propertyAnimationHide(userPasswordRepeat, requireContext())
-            ViewsAnimation.messageHideAnimation(incorrectMessage, requireContext())
-        }
-
-        incorrectMessage.setText(R.string.empty_reg_lines)
-        ViewsAnimation.messageShowAnimation(incorrectMessage, requireContext())
-    }
-
-    private fun registrationPasswordsNotMatchAnimation() {
-        clearFocus()
-
-        val userNewPasswordLine = binding.userNewPassword
-        val userPasswordRepeat = binding.userRepeatPassword
-        val incorrectMessage = binding.messageRegistration
-
-        incorrectMessage.setText(R.string.passwords_reg_error)
-        ViewsAnimation.messageShowAnimation(incorrectMessage, requireContext())
-
-        ViewsAnimation.propertyAnimationShow(userNewPasswordLine, requireContext())
-        ViewsAnimation.propertyAnimationShow(userPasswordRepeat, requireContext())
-
-        ViewsAnimation.propertyAnimationHide(userNewPasswordLine, requireContext())
-        ViewsAnimation.propertyAnimationHide(userPasswordRepeat, requireContext())
-
-        ViewsAnimation.messageHideAnimation(incorrectMessage, requireContext())
-    }
-
-    private fun accountExistAnimation() {
-        clearFocus()
-
-        val userNewEmailLine = binding.userNewEmail
-        val incorrectMessage = binding.messageRegistration
-
-        incorrectMessage.setText(R.string.account_exist_error)
-
-        ViewsAnimation.messageShowAnimation(incorrectMessage, requireContext())
-        ViewsAnimation.propertyAnimationShow(userNewEmailLine, requireContext())
-
-        ViewsAnimation.messageHideAnimation(incorrectMessage, requireContext())
-        ViewsAnimation.propertyAnimationHide(userNewEmailLine, requireContext())
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
     }
 
     private fun clearFocus() {
