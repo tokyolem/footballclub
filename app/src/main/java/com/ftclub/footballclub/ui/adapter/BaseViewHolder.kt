@@ -1,4 +1,4 @@
-package com.ftclub.footballclub.ui
+package com.ftclub.footballclub.ui.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding

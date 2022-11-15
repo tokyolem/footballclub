@@ -1,4 +1,4 @@
-package com.ftclub.footballclub.ui
+package com.ftclub.footballclub.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
