@@ -8,6 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.OnBackPressedDispatcher
+import androidx.activity.addCallback
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.ftclub.footballclub.R
@@ -16,20 +19,19 @@ import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
 import com.ftclub.footballclub.basic.room.accounts.viewModel.AccountsViewModel
 import com.ftclub.footballclub.databinding.FragmentAddBinding
 import com.ftclub.footballclub.ui.ViewsAnimation
+import com.ftclub.footballclub.ui.administratorActivity.AdministratorActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class AddFragment : Fragment() {
 
     private lateinit var viewModel: AddViewModel
-    private lateinit var accountsViewModel: AccountsViewModel
-
-    private val userScope = CoroutineScope(Dispatchers.Main)
+    private lateinit var dbViewModel: AccountsViewModel
 
     private lateinit var _binding: FragmentAddBinding
     private val binding get() = _binding
+
+    private lateinit var accountsList: List<Accounts>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,53 +40,63 @@ class AddFragment : Fragment() {
         _binding = FragmentAddBinding.inflate(inflater, container, false)
 
         viewModel = ViewModelProviders.of(this)[AddViewModel::class.java]
-        accountsViewModel = ViewModelProviders.of(this)[AccountsViewModel::class.java]
+        dbViewModel = ViewModelProviders.of(this)[AccountsViewModel::class.java]
 
-        BottomSheetBehavior.from(binding.bottomSheetAdd).apply {
-            peekHeight = 200
-            Handler(Looper.getMainLooper()).postDelayed({
-                this.state = BottomSheetBehavior.STATE_EXPANDED
-            }, 100)
-        }
+        setBottomSheetState(0, BottomSheetBehavior.STATE_EXPANDED, true)
 
         binding.toNextActionAddReg.visibility = View.INVISIBLE
+
+        dbViewModel.accountsLiveData.observe(viewLifecycleOwner) { accounts ->
+            accountsList = accounts
+        }
+
+        nextAddingAction()
+        setBottomNavViewVisibility(View.GONE)
+        onBackClick()
 
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    private fun setBottomSheetState(mPeekHeight: Int, mState: Int, withPostDelayed: Boolean) {
+        when (withPostDelayed) {
+            true -> BottomSheetBehavior.from(binding.bottomSheetAdd).apply {
+                peekHeight = mPeekHeight
+                Handler(Looper.getMainLooper()).postDelayed({
+                    this.state = mState
+                }, 100)
+            }
 
-        addKindSelectAction()
+            false -> BottomSheetBehavior.from(binding.bottomSheetAdd).apply {
+                peekHeight = mPeekHeight
+                this.state = mState
+            }
+        }
+    }
+
+    private fun nextAddingAction() {
+        methodOfAdding()
 
         binding.toNextActionAddReg.setOnClickListener {
-            userScope.launch {
-                addingFullProcess()
-            }
+            addingProcess(true)
         }
 
         binding.addNewAccountHalf.setOnClickListener {
-            userScope.launch {
-                addingHalfProcess()
-            }
+            addingProcess(false)
         }
     }
 
-    private suspend fun isAccountExist(accountEmail: String): Boolean {
-        val accountEmails = accountsViewModel.getAccountEmail(accountEmail)
+    private fun isAccountExist(accountEmail: String): Boolean {
+        for (account in accountsList) if (accountEmail == account.accountEmail) return true
 
-        return accountEmails.isNotEmpty()
+        return false
     }
 
-    private fun addKindSelectAction() {
+    private fun methodOfAdding() {
         binding.addFullAccount.setOnClickListener {
-            BottomSheetBehavior.from(binding.bottomSheetAdd).state =
-                BottomSheetBehavior.STATE_COLLAPSED
+            setBottomSheetState(0, BottomSheetBehavior.STATE_COLLAPSED, false)
 
             if (binding.toNextActionAddReg.visibility != View.VISIBLE)
                 ViewsAnimation.viewScaleUp(binding.toNextActionAddReg, requireContext())
-
-            propertyLinesShowAnimation()
 
             if (binding.addNewAccountHalf.visibility == View.VISIBLE) {
                 propertyButtonHalfAddAnimation(false)
@@ -92,13 +104,10 @@ class AddFragment : Fragment() {
         }
 
         binding.addHalfAccount.setOnClickListener {
-            BottomSheetBehavior.from(binding.bottomSheetAdd).state =
-                BottomSheetBehavior.STATE_COLLAPSED
+            setBottomSheetState(0, BottomSheetBehavior.STATE_COLLAPSED, false)
 
             if (binding.toNextActionAddReg.visibility == View.VISIBLE)
                 ViewsAnimation.viewScaleDown(binding.toNextActionAddReg, requireContext())
-
-            propertyLinesShowAnimation()
 
             if (binding.addNewAccountHalf.visibility != View.VISIBLE) {
                 propertyButtonHalfAddAnimation(true)
@@ -106,91 +115,67 @@ class AddFragment : Fragment() {
         }
     }
 
+    private fun addingProcess(isFullProcess: Boolean) {
+        if (isLinesEmpty()) {
+            showMessage("Заполните все необходимые поля!", Toast.LENGTH_LONG)
+            return
+        } else {
+            if (binding.addNewPassword.text.toString() != binding.addRepeatPassword.text.toString()) {
+                showMessage("Пароли не совпадают!", Toast.LENGTH_LONG)
+                return
+            } else if (isAccountExist(getAccountEmail())) {
+                showMessage("Аккаунт с таким email адресом уже существует!", Toast.LENGTH_LONG)
+                return
+            } else {
+                when (isFullProcess) {
+                    true -> {
+                        val toAddInformationFragment =
+                            arrayOf(getAccountEmail(), getAccountPassword())
+                        findNavController().navigate(
+                            AddFragmentDirections.actionNavigationAddToAddInformationFragment(
+                                toAddInformationFragment
+                            )
+                        )
+                    }
+                    false -> {
+                        dbViewModel.insertAccount(
+                            Accounts(
+                                getAccountEmail(), getAccountPassword(), false,
+                                DateTime.getFormatDateTime(), "", "", "",
+                                "", "", ""
+                            )
+                        )
+                        showMessage("Аккаунт успешно добавлен!", Toast.LENGTH_LONG)
+                        findNavController().navigate(R.id.action_navigation_add_to_navigation_accounts)
+                    }
+                }
+            }
+        }
+    }
+
     private fun isLinesEmpty() =
-        binding.addNewEmail.text.isEmpty()
-                || binding.addNewPassword.text.isEmpty()
-                || binding.addRepeatPassword.text.isEmpty()
+        binding.addNewEmail.text!!.isEmpty()
+                || binding.addNewPassword.text!!.isEmpty()
+                || binding.addRepeatPassword.text!!.isEmpty()
 
-    private suspend fun addingHalfProcess() {
-        if (isLinesEmpty()) {
-            propertyLinesEmptyAnimation()
-            return
-        } else {
-            if (binding.addNewPassword.text.toString() != binding.addRepeatPassword.text.toString()) {
-                showMessage("Пароли не совпадают!", Toast.LENGTH_LONG)
-                return
-            } else if (isAccountExist(getAccountEmail())) {
-                showMessage("Аккаунт с таким email адресом уже существует!", Toast.LENGTH_LONG)
-                return
-            } else {
-                accountsViewModel.insertAccount(
-                    Accounts(
-                        getAccountEmail(), getAccountPassword(), false,
-                        DateTime.getFormatDateTime(), "", "", "",
-                        "", "", ""
-                    )
-                )
-                showMessage("Аккаунт успешно добавлен!", Toast.LENGTH_LONG)
-                findNavController().navigate(R.id.action_navigation_add_to_navigation_accounts)
-            }
-        }
-    }
-
-    private suspend fun addingFullProcess() {
-        if (isLinesEmpty()) {
-            propertyLinesEmptyAnimation()
-            return
-        } else {
-            if (binding.addNewPassword.text.toString() != binding.addRepeatPassword.text.toString()) {
-                showMessage("Пароли не совпадают!", Toast.LENGTH_LONG)
-                return
-            } else if (isAccountExist(getAccountEmail())) {
-                showMessage("Аккаунт с таким email адресом уже существует!", Toast.LENGTH_LONG)
-                return
-            } else {
-                val toAddInformationFragment = arrayOf(getAccountEmail(), getAccountPassword())
-                val action =
-                    com.ftclub.footballclub.ui.add.AddFragmentDirections.actionNavigationAddToAddInformationFragment(
-                        toAddInformationFragment
-                    )
-                findNavController().navigate(action)
-            }
-        }
-    }
-
-    private fun propertyLinesEmptyAnimation() {
-        if (binding.addNewEmail.text.isEmpty()) {
-            ViewsAnimation.propertyAnimationShow(binding.addNewEmail, requireContext())
-            ViewsAnimation.propertyAnimationHide(binding.addNewEmail, requireContext())
-        }
-        if (binding.addNewPassword.text.isEmpty()) {
-            ViewsAnimation.propertyAnimationShow(binding.addNewPassword, requireContext())
-            ViewsAnimation.propertyAnimationHide(binding.addNewPassword, requireContext())
-        }
-        if (binding.addRepeatPassword.text.isEmpty()) {
-            ViewsAnimation.propertyAnimationShow(binding.addRepeatPassword, requireContext())
-            ViewsAnimation.propertyAnimationHide(binding.addRepeatPassword, requireContext())
-        }
-
-        showMessage("Заполните все необходимые поля!", Toast.LENGTH_LONG)
-    }
-
-    private fun propertyLinesShowAnimation() {
-        if (binding.addNewEmail.visibility == View.VISIBLE) {
-            return
-        } else {
-            ViewsAnimation.viewShowAnimation(binding.addNewEmail, requireContext())
-            ViewsAnimation.viewShowAnimation(binding.addNewPassword, requireContext())
-            ViewsAnimation.viewShowAnimation(binding.addRepeatPassword, requireContext())
-        }
-    }
 
     private fun propertyButtonHalfAddAnimation(visibility: Boolean) {
         if (visibility) {
-            ViewsAnimation.viewShowAnimation(binding.addNewAccountHalf, requireContext())
+            ViewsAnimation.viewScaleUp(binding.addNewAccountHalf, requireContext())
         } else {
-            ViewsAnimation.viewHideAnimation(binding.addNewAccountHalf, requireContext())
+            ViewsAnimation.viewScaleDown(binding.addNewAccountHalf, requireContext())
         }
+    }
+
+    private fun onBackClick() {
+        binding.back.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+    }
+
+    private fun setBottomNavViewVisibility(visibility: Int) {
+        requireActivity().findViewById<BottomNavigationView>(R.id.nav_view)
+            .visibility = visibility
     }
 
     private fun showMessage(message: String, duration: Int) {
@@ -201,4 +186,8 @@ class AddFragment : Fragment() {
 
     private fun getAccountPassword() = binding.addNewPassword.text.toString()
 
+    override fun onStop() {
+        super.onStop()
+        setBottomNavViewVisibility(View.VISIBLE)
+    }
 }
