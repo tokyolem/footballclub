@@ -1,26 +1,20 @@
-package com.ftclub.footballclub.ui.administratorActivity.players
+package com.ftclub.footballclub.ui.administratorActivity.players.recycler
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
-import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DiffUtil
 import com.ftclub.footballclub.R
 import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
 import com.ftclub.footballclub.databinding.PlayersCardBinding
-import com.ftclub.footballclub.ui.BaseViewHolder
-import com.ftclub.footballclub.ui.ItemFingerprint
-import com.ftclub.footballclub.ui.search.SearchFragmentDirections
-
+import com.ftclub.footballclub.ui.adapter.BaseViewHolder
+import com.ftclub.footballclub.ui.adapter.Item
+import com.ftclub.footballclub.ui.adapter.ItemFingerprint
 
 class PlayersFingerprint(
-    private val context: Context,
-    private val fragment: Fragment,
-    private val isSearchFragment: Boolean
+    private val cardClickAction: (item: Accounts) -> Unit
 ) : ItemFingerprint<PlayersCardBinding, Accounts> {
 
-    override fun isRelativeItem(item: Accounts) = true
+    override fun isRelativeItem(item: Item) = item is Accounts
 
     override fun getLayoutId() = R.layout.players_card
 
@@ -29,74 +23,53 @@ class PlayersFingerprint(
         parent: ViewGroup
     ): BaseViewHolder<PlayersCardBinding, Accounts> {
         val binding = PlayersCardBinding.inflate(layoutInflater, parent, false)
-        return PlayersViewHolder(binding, context, fragment, isSearchFragment)
+        return PlayersViewHolder(binding, cardClickAction)
+    }
+
+    override fun getDiffUtil() = diffUtil
+
+    private val diffUtil = object : DiffUtil.ItemCallback<Accounts>() {
+
+        override fun areItemsTheSame(oldItem: Accounts, newItem: Accounts) =
+            oldItem.id == newItem.id
+
+        override fun areContentsTheSame(oldItem: Accounts, newItem: Accounts) =
+            oldItem == newItem
+
     }
 }
 
 class PlayersViewHolder(
     binding: PlayersCardBinding,
-    private val context: Context,
-    private val fragment: Fragment,
-    private val isSearchFragment: Boolean
+    private val cardClickAction: (item: Accounts) -> Unit
 ) : BaseViewHolder<PlayersCardBinding, Accounts>(binding) {
 
     override fun onBind(item: Accounts) {
-        voidNotice(item)
-        //onCardClick(item)
+        setPlayersContent(item)
+        onCardClick(item)
     }
 
-    private fun voidNotice(item: Accounts) {
-        /* if (item.firstName.isEmpty()) {
-            binding.notice.setBackgroundColor(
-                context.resources.getColor(
-                    R.color.logout_color,
-                    context.resources.newTheme()
-                )
-            )
-
-            binding.checkAccount.setImageDrawable(
-                ResourcesCompat.getDrawable(
-                    context.resources,
-                    R.drawable.ic_exclamation,
-                    context.resources.newTheme()
-                )
-            )
-
-            binding.playerCardTitle.text = "<Не указано>"
-            binding.phone.text = "<Не указано>"
+    private fun setPlayersContent(item: Accounts) {
+        if (item.firstName.isEmpty()) {
+            binding.userName.text = "<Не указано>"
+            binding.userPhoneNumber.text = "<Не указано>"
+            binding.playerPosition.text = "<Не указано>"
         } else {
-            binding.notice.setBackgroundColor(
-                context.resources.getColor(
-                    R.color.AppBarColor,
-                    context.resources.newTheme()
-                )
-            )
+            binding.userName.text = "${item.firstName} ${item.lastName}"
+            binding.userPhoneNumber.text = item.phoneNumber
+            binding.playerPosition.text = item.playerPosition
+        }
 
-            binding.checkAccount.setImageDrawable(
-                ResourcesCompat.getDrawable(
-                    context.resources,
-                    R.drawable.ic_check,
-                    context.resources.newTheme()
-                )
-            )
-
-            binding.playerCardTitle.text = "${item.firstName} ${item.lastName}"
-            binding.phone.text = "Номер телефона: ${item.phoneNumber}"
+        if (item.playerInformation.isEmpty()) {
+            binding.playerInformation.text = "Игрок не указал информацию о себе"
+        } else {
+            binding.playerInformation.text = item.playerInformation
         }
     }
 
     private fun onCardClick(item: Accounts) {
-        binding.playersCard.setOnClickListener {
-            if (isSearchFragment) {
-                val action =
-                    SearchFragmentDirections.actionSearchFragmentToPlayerPageFragment(item.id!!.toInt())
-                fragment.findNavController().navigate(action)
-            } else {
-                val action =
-                    PlayersFragmentDirections.actionNavigationPlayersToPlayerPageFragment(item.id!!.toInt())
-                fragment.findNavController().navigate(action)
-            }
+        binding.playerCard.setOnClickListener {
+            cardClickAction.invoke(item)
         }
-    }*/
     }
 }

@@ -1,45 +1,41 @@
-package com.ftclub.footballclub.ui.administratorActivity.players
+package com.ftclub.footballclub.ui.administratorActivity.players.recycler
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import androidx.viewbinding.ViewBinding
+import com.ftclub.footballclub.ui.adapter.diffUtil.FingerprintDiffUtil
 import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
-import com.ftclub.footballclub.ui.BaseViewHolder
-import com.ftclub.footballclub.ui.ItemFingerprint
+import com.ftclub.footballclub.ui.adapter.BaseViewHolder
+import com.ftclub.footballclub.ui.adapter.Item
+import com.ftclub.footballclub.ui.adapter.ItemFingerprint
 
 class PlayersAdapter(
-    private val accounts: List<ItemFingerprint<*, *>>
-) : RecyclerView.Adapter<BaseViewHolder<ViewBinding, Accounts>>() {
+    private val fingerprints: List<ItemFingerprint<*, *>>
+) : ListAdapter<Item, BaseViewHolder<ViewBinding, Item>>(
+    FingerprintDiffUtil(fingerprints)
+) {
 
-    private var items = emptyList<Accounts>()
-
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): BaseViewHolder<ViewBinding, Accounts> {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<ViewBinding, Item> {
         val inflater = LayoutInflater.from(parent.context)
-        return accounts.find { it.getLayoutId() == viewType }
+        return fingerprints.find { it.getLayoutId() == viewType }
             ?.getViewHolder(inflater,parent)
-            ?.let { it as BaseViewHolder<ViewBinding, Accounts> }
+            ?.let { it as BaseViewHolder<ViewBinding, Item> }
             ?: throw java.lang.IllegalArgumentException("View type not found: $viewType")
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder<ViewBinding, Accounts>, position: Int) {
-        holder.onBind(items[position])
+    override fun onBindViewHolder(holder: BaseViewHolder<ViewBinding, Item>, position: Int) {
+        holder.onBind(getItem(position))
     }
 
-    override fun getItemCount() = items.size
-
     override fun getItemViewType(position: Int): Int {
-        val item = items[position]
-        return accounts.find { it.isRelativeItem(item) }
+        val item = currentList[position]
+        return fingerprints.find { it.isRelativeItem(item) }
             ?.getLayoutId()
             ?: throw java.lang.IllegalArgumentException("View type not found: $item")
     }
 
-    fun setData(accounts: List<Accounts>) {
-        this.items = accounts
-        notifyDataSetChanged()
-    }
+    override fun getItemId(position: Int) =
+        (currentList[position] as Accounts).id!!
+
 }
