@@ -1,8 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.FootballClub" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.FootballClub" parent="Theme.Material3.DynamicColors.Light">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="background">@color/background</item>
+        <item name="colorPrimary">@color/fab_color</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/white</item>
 
@@ -11,20 +12,20 @@
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/background</item>
         <!-- Customize your theme here. -->
-        <item name="android:actionBarStyle">@style/AppBarStyle</item>
-        <item name="android:windowLightStatusBar" >true</item>
-        <item name="android:statusBarColor" >@android:color/white</item>
-    </style>
-
-    <style name="AppBarStyle" parent="@android:style/Widget.Holo.Light.ActionBar">
-        <item name="android:background">@color/AppBarColor</item>
-        <item name="android:titleTextStyle">@style/TextAppearance</item>
     </style>
 
     <!-- стиль для текста -->
     <style name="TextAppearance" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="FabTheme" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50dp</item>
+        <item name="android:radius">40dp</item>
     </style>
 
     <style name="Theme.LawsRB.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -43,47 +44,24 @@
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
         <item name="android:layout_margin">3dp</item>
+        <item name="borderWidth">0dp</item>
+        <item name="strokeWidth">0dp</item>
         <item name="android:textSize">20sp</item>
 
     </style>
 
-    <style name="Theme.LawsRB.CardView.Article.Content" parent="Widget.MaterialComponents.TextView">
-        <item name="android:text">heeloo</item>
-        <item name="android:textColor">?attr/colorOnSurface</item>
-        <item name="android:textAppearance">?attr/textAppearanceBody1</item>
-    </style>
-
-    <style name="Theme.ftclub.CardView.Accounts" parent="Theme.ftclub.CardView">
-        <item name="cardBackgroundColor">@android:color/white</item>
-        <item name="cardElevation">3dp</item>
-        <item name="cardCornerRadius">10dp</item>
+    <style name="Theme.ftclub.CardView.Card.Content" parent="Theme.ftclub.CardView">
+        <item name="backgroundColor">#FFFBFE</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardCornerRadius">0dp</item>
     </style>
 
     <style name="Theme.ftclub.CardView.AboutPlayer" parent="Theme.ftclub.CardView">
         <item name="cardBackgroundColor">@android:color/white</item>
         <item name="cardElevation">0dp</item>
-        <item name="cardCornerRadius">00dp</item>
+        <item name="cardCornerRadius">0dp</item>
     </style>
 
-    <style name="Theme.LawsRB.TabLayout.Light" parent="Theme.MaterialComponents.DayNight">
-        <item name="android:background">@color/white</item>
-        <item name="tabTextColor">@color/white</item>
-        <item name="tabSelectedTextColor">?attr/colorOnPrimary</item>
-        <item name="tabIndicatorColor">?attr/colorOnPrimary</item>
-        <item name="tabIndicatorHeight">4dp</item>
-        <item name="tabIndicatorFullWidth">false</item>
-    </style>
-
-    <style name="Theme.FootballClub.EditTextStyle" parent="Theme.FootballClub">
-
-        <item name="android:strokeAlpha">1.0</item>
-
-    </style>
-
-    <style name="StatusBarWhite" parent="AppBarStyle">
-        <item name="android:windowLightStatusBar" >true</item>
-        <item name="android:statusBarColor" >@android:color/white</item>
-    </style>
 
     <style name="MaterialAlertDialog.Rounded" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="shapeAppearanceOverlay">
@@ -95,9 +73,22 @@
         <item name="cornerSize">10dp</item>
     </style>
 
-    <style name="Theme.FootballClub.Admin" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.FootballClub.SearchView" parent="Widget.AppCompat.Light.SearchView">
+        <item name="submitBackground">@color/transparent</item>
+        <item name="queryBackground">@color/transparent</item>
+    </style>
+
+    <style name="ThemeOverlay.AppTheme.TextInputEditText.Outlined" parent="">
+        <item name="colorControlActivated">@color/background_about_app</item>
+    </style>
+
+    <style name="ProgressBarTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="colorAccent">@color/black</item>
+    </style>
+
+    <style name="Theme.FootballClub.Application" parent="Theme.Material3.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">@color/fab_color</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
         <item name="colorOnPrimary">@color/light_white</item>
 
@@ -105,10 +96,12 @@
         <item name="colorSecondary">@color/teal_200</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
         <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondaryContainer">@color/fill_color</item>
         <!-- Status bar color. -->
         <!-- Customize your theme here. -->
-        <item name="android:actionBarStyle">@style/AppBarStyle</item>
         <item name="android:windowLightStatusBar" >true</item>
-        <item name="android:statusBarColor" >@android:color/white</item>
+        <item name="android:statusBarColor" >@color/background</item>
+
+        <item name="searchViewStyle">@style/Theme.FootballClub.SearchView</item>
     </style>
 </resources>
