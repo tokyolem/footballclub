@@ -4,10 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".ui.signInActivity.home.HomeFragment">
 
-    <FrameLayout
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/to_authorization_page"
+        style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
@@ -15,30 +17,18 @@
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="496dp"
-        android:background="@drawable/sign_in_button"
-        android:clickable="true"
-        android:elevation="4dp"
-        android:focusable="true"
-        android:foreground="?selectableItemBackground"
+        android:backgroundTint="@color/white"
+        android:text="@string/sign_in"
+        android:textColor="@color/black"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/text_authorization_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="sans-serif-light"
-            android:text="@string/sign_in"
-            android:textColor="@color/white"
-            android:textSize="24sp" />
-
-    </FrameLayout>
-
-    <FrameLayout
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/to_registration_page"
+        style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
@@ -46,41 +36,28 @@
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="96dp"
-        android:layout_weight="1"
-        android:background="@drawable/sign_in_button"
-        android:clickable="true"
-        android:elevation="4dp"
-        android:focusable="true"
-        android:foreground="?selectableItemBackground"
+        android:backgroundTint="@color/white"
+        android:text="@string/sign_up"
+        android:textColor="@color/black"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/to_authorization_page"
-        app:layout_constraintVertical_bias="0.143">
+        app:layout_constraintVertical_bias="0.143" />
 
-        <TextView
-            android:id="@+id/text_registration_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="sans-serif-light"
-            android:text="@string/sign_up"
-            android:textColor="@color/white"
-            android:textSize="24sp" />
-    </FrameLayout>
-
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text_information"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
+        android:fontFamily="sans-serif-light"
         android:gravity="start"
-        android:textStyle="bold"
         android:text="@string/home_message"
         android:textSize="28sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/to_authorization_page"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -124,8 +101,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
         android:layout_marginTop="0dp"
+        android:layout_marginEnd="15dp"
         android:text="@string/home_message_2"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/to_authorization_page"
