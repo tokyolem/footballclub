@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_user_players"
+            android:icon="@drawable/ic_player"
+            android:title="@string/players" />
+
+        <item
+            android:id="@+id/nav_user_about_app"
+            android:icon="@drawable/ic_about_app"
+            android:title="@string/about_app" />
+    </group>
+
+</menu>
