@@ -1,199 +1,242 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/background"
     tools:context=".ui.administratorActivity.add.AddFragment">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/back"
+        style="@style/Widget.Material3.Button.IconButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/ic_back"
+        app:iconTint="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/add_message_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:gravity="start"
+        android:gravity="start|center"
         android:text="@string/add_new_account"
-        android:textStyle="bold"
-        android:textSize="26sp"/>
-    <TextView
-        android:id="@+id/add_message_2"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/back" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/account_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:gravity="start"
-        android:text="@string/account_add_message"
-        android:textSize="16sp"/>
-
-    <EditText
-        android:id="@+id/add_new_email"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
         android:layout_gravity="center"
-        android:layout_marginEnd="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginBottom="350dp"
-        android:visibility="gone"
-        android:hint="@string/e_mail"/>
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="10dp"
+        android:hint="@string/e_mail"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:counterEnabled="true"
+        app:counterMaxLength="30"
+        app:endIconMode="clear_text"
+        app:helperText="Рабочий email адрес (по нему с игроком могут связаться представители клуба)"
+        app:helperTextTextColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:startIconDrawable="@drawable/ic_baseline_email_24">
 
-    <EditText
-        android:id="@+id/add_new_password"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_gravity="center"
-        android:layout_marginEnd="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginBottom="200dp"
-        android:visibility="gone"
-        android:hint="@string/password"/>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/add_new_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:maxLength="31" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <EditText
-        android:id="@+id/add_repeat_password"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/account_password"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginEnd="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginBottom="50dp"
-        android:visibility="gone"
-        android:hint="@string/repeat_password"/>
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:hint="@string/password"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:counterEnabled="true"
+        app:counterMaxLength="30"
+        app:endIconMode="password_toggle"
+        app:helperText="Введите надёжный пароль, запомните и/или запишите его"
+        app:helperTextTextColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/account_email"
+        app:startIconDrawable="@drawable/ic_locked">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/add_new_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:maxLength="31" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/account_repeat_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        app:helperText="Повторите введённый выше пароль. Никогда не раскрывайте пароль третьим лицам!"
+        android:hint="@string/repeat_password"
+        app:boxCornerRadiusBottomEnd="10dp"
+        app:boxCornerRadiusBottomStart="10dp"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:boxCornerRadiusTopStart="10dp"
+        app:counterEnabled="true"
+        app:counterMaxLength="30"
+        app:endIconMode="password_toggle"
+        app:helperTextTextColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/account_password"
+        app:startIconDrawable="@drawable/ic_locked">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/add_repeat_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:maxLength="31" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/to_next_action_add_reg"
+        style="@style/Widget.Material3.FloatingActionButton.Large.Primary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        app:layout_anchor="@id/bottom_sheet_add"
-        app:layout_anchorGravity="top|end"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="25dp"
+        android:backgroundTint="@color/fab_color"
         android:clickable="true"
+        android:elevation="10dp"
         android:focusable="true"
-        app:borderWidth="0dp"
         android:src="@drawable/ic_baseline_navigate_next_24"
-        android:backgroundTint="@color/background_about_app"
-        android:elevation="10dp" />
+        app:layout_anchorGravity="top|end"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white" />
 
-    <FrameLayout
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/add_new_account_half"
+        style="@style/Widget.Material3.Button.TextButton"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:background="@drawable/sign_in_button"
-        android:clickable="true"
-        android:elevation="4dp"
-        android:focusable="true"
-        android:foreground="?selectableItemBackground"
+        android:layout_height="50dp"
         android:layout_gravity="center|bottom"
-        android:layout_marginBottom="320dp"
-        android:visibility="gone">
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/add"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-        <TextView
-            android:id="@+id/text_add_new_account"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="sans-serif-light"
-            android:text="@string/add"
-            android:textColor="@color/white"
-            android:textSize="24sp" />
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/bottom_sheet_add"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:background="@drawable/rounded"
-        android:layout_height="300dp"
-        app:layout_insetEdge="bottom">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <FrameLayout
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_vector"
-            android:layout_gravity="end"
-            android:layout_marginEnd="30dp"
-            android:layout_marginTop="130dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|top"
-            android:text="@string/or"
-            android:layout_marginTop="120dp"/>
-
-        <FrameLayout
-            android:layout_width="140dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_vector"
-            android:layout_marginStart="30dp"
-            android:layout_gravity="start"
-            android:layout_marginTop="130dp"/>
-
-        <ImageView
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_remove_24"
-            android:layout_gravity="center|top"/>
-
-        <FrameLayout
-            android:id="@+id/add_half_account"
+            android:id="@+id/bottom_sheet_add"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_height="220dp"
+            android:layout_gravity="top"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
-            android:background="@drawable/sign_in_button"
-            android:clickable="true"
-            android:elevation="4dp"
-            android:focusable="true"
-            android:foreground="?selectableItemBackground"
-            android:layout_gravity="center|top"
-            android:layout_marginTop="60dp">
+            android:background="@drawable/rounded"
+            app:layout_anchorGravity="top"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+            app:layout_insetEdge="bottom">
+
+            <FrameLayout
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="110dp"
+                android:layout_marginEnd="30dp"
+                android:background="@drawable/ic_vector" />
 
             <TextView
-                android:id="@+id/text_add_half_account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="sans-serif-light"
+                android:layout_gravity="center|top"
+                android:layout_marginTop="100dp"
+                android:text="@string/or" />
+
+            <FrameLayout
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="110dp"
+                android:background="@drawable/ic_vector" />
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|top"
+                android:src="@drawable/ic_baseline_remove_24" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/add_half_account"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center|top"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="10dp"
                 android:text="@string/half_account"
-                android:textColor="@color/white"
-                android:textSize="24sp" />
+                android:textColor="@color/black"
+                android:textSize="20sp" />
 
-        </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/add_full_account"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
-            android:background="@drawable/sign_in_button"
-            android:clickable="true"
-            android:elevation="4dp"
-            android:focusable="true"
-            android:foreground="?selectableItemBackground"
-            android:layout_gravity="center|top"
-            android:layout_marginTop="160dp">
-
-            <TextView
-                android:id="@+id/text_add_full_account"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="sans-serif-light"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/add_full_account"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center|top"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="140dp"
+                android:layout_marginEnd="10dp"
                 android:text="@string/full_account"
-                android:textColor="@color/white"
-                android:textSize="24sp" />
+                android:textColor="@color/black"
+                android:textSize="20sp" />
 
         </FrameLayout>
 
-    </FrameLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
