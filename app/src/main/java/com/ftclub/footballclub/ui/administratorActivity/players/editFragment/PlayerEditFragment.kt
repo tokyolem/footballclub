@@ -1,17 +1,14 @@
-package com.ftclub.footballclub.ui.administratorActivity.players.playerPage
+package com.ftclub.footballclub.ui.administratorActivity.players.editFragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
-import android.widget.DatePicker.OnDateChangedListener
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
-import com.ftclub.footballclub.ui.administratorActivity.AdministratorActivity
 import com.ftclub.footballclub.R
+import com.ftclub.footballclub.basic.DateTime
 import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
 import com.ftclub.footballclub.basic.room.accounts.viewModel.AccountsViewModel
 import com.ftclub.footballclub.databinding.FragmentPlayerEditBinding
@@ -41,11 +38,7 @@ class PlayerEditFragment : Fragment() {
 
         requireActivity().findViewById<BottomNavigationView>(R.id.nav_view).visibility = View.GONE
 
-        BottomSheetBehavior.from(binding.ageBottomSheet).apply {
-            peekHeight = 0
-            this.state = BottomSheetBehavior.STATE_COLLAPSED
-        }
-
+        setBottomSheetState(BottomSheetBehavior.STATE_COLLAPSED)
         initDatePicker()
         navigation()
         setAccountContent()
@@ -55,7 +48,7 @@ class PlayerEditFragment : Fragment() {
     }
 
     private fun initDatePicker() {
-        binding.datePicker.maxDate = System.currentTimeMillis()
+        binding.datePicker.maxDate = System.currentTimeMillis() + 1_000_000
 
         val date = Date()
         val calendar = GregorianCalendar()
@@ -68,6 +61,13 @@ class PlayerEditFragment : Fragment() {
         }
     }
 
+    private fun setBottomSheetState(mState: Int) {
+        BottomSheetBehavior.from(binding.ageBottomSheet).apply {
+            peekHeight = 0
+            state = mState
+        }
+    }
+
     private fun navigation() {
         binding.close.setOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
@@ -76,13 +76,11 @@ class PlayerEditFragment : Fragment() {
 
     private fun onAgeButtonsClick() {
         binding.addAge.setOnClickListener {
-            BottomSheetBehavior.from(binding.ageBottomSheet).state =
-                BottomSheetBehavior.STATE_EXPANDED
+            setBottomSheetState(BottomSheetBehavior.STATE_EXPANDED)
         }
 
         binding.applySetAge.setOnClickListener {
-            BottomSheetBehavior.from(binding.ageBottomSheet).state =
-                BottomSheetBehavior.STATE_COLLAPSED
+            setBottomSheetState(BottomSheetBehavior.STATE_COLLAPSED)
         }
     }
 
@@ -130,7 +128,7 @@ class PlayerEditFragment : Fragment() {
             binding.playerPositionSelector.setText(account.playerPosition)
         }
 
-        if(account.playerInformation.isEmpty()) {
+        if (account.playerInformation.isEmpty()) {
             binding.playerInformationLine.setText("")
         } else {
             binding.playerInformationLine.setText(account.playerInformation)
@@ -148,24 +146,11 @@ class PlayerEditFragment : Fragment() {
     private fun getPlayerInformation() = binding.playerInformationLine.text.toString()
 
     private fun getPlayerAge(account: Accounts): String {
-        val newYear = binding.datePicker.year
-        val setMonth = binding.datePicker.month
-        val setDay = binding.datePicker.dayOfMonth
-
-        var newMonth = ""
-        var newDay = ""
-
-        when (setMonth) {
-            in 0..9 -> newMonth = "0${setMonth + 1}"
-            in 10..12 -> newMonth = setMonth.toString()
-        }
-
-        when (setDay) {
-            in 0..9 -> newDay = "0${setDay}"
-            in 10..31 -> newDay = setDay.toString()
-        }
-
-        return if (isDatePickerUsed) "$newDay/$newMonth/$newYear"
+        return if (isDatePickerUsed) DateTime.formatPlayerAge(
+            binding.datePicker.year,
+            binding.datePicker.month,
+            binding.datePicker.dayOfMonth
+        )
         else account.playerAge
     }
 

@@ -1,16 +1,13 @@
-package com.ftclub.footballclub.ui.administratorActivity.players.playerPage.pageFragment
+package com.ftclub.footballclub.ui.administratorActivity.players.playerPageP
 
 import android.content.ClipData
 import android.content.Context
 import android.os.Bundle
-import android.transition.AutoTransition
-import android.transition.TransitionManager
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -18,7 +15,6 @@ import com.ftclub.footballclub.R
 import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
 import com.ftclub.footballclub.basic.room.accounts.viewModel.AccountsViewModel
 import com.ftclub.footballclub.databinding.FragmentPlayerPageBinding
-import com.ftclub.footballclub.ui.ViewsAnimation
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 /**
