@@ -42,5 +42,4 @@ class PlayersAdapter(
         this.items = accounts
         notifyDataSetChanged()
     }
-
 }

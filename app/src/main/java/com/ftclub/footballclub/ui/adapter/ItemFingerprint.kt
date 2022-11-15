@@ -3,12 +3,12 @@ package com.ftclub.footballclub.ui
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.recyclerview.widget.DiffUtil
 import androidx.viewbinding.ViewBinding
-import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
 
-interface ItemFingerprint<V : ViewBinding, I : Accounts> {
+interface ItemFingerprint<V : ViewBinding, I : Item> {
 
-    fun isRelativeItem(item: Accounts): Boolean
+    fun isRelativeItem(item: Item): Boolean
 
     @LayoutRes
     fun getLayoutId(): Int
@@ -17,4 +17,6 @@ interface ItemFingerprint<V : ViewBinding, I : Accounts> {
         layoutInflater: LayoutInflater,
         parent: ViewGroup
     ): BaseViewHolder<V, I>
+
+    fun getDiffUtil(): DiffUtil.ItemCallback<I>
 }

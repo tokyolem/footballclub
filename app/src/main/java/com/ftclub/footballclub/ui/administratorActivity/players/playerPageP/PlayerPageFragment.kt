@@ -1,10 +1,8 @@
-package com.ftclub.footballclub.ui.administratorActivity.players
+package com.ftclub.footballclub.ui.administratorActivity.players.playerPage.pageFragment
 
 import android.content.ClipData
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.transition.AutoTransition
 import android.transition.TransitionManager
 import androidx.fragment.app.Fragment
@@ -12,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -29,8 +28,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
  */
 class PlayerPageFragment : Fragment() {
 
-    private lateinit var _binding: FragmentPlayerPageBinding
-    private val binding get() = _binding
+    private var _binding: FragmentPlayerPageBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var dbViewModel: AccountsViewModel
 
@@ -50,31 +49,31 @@ class PlayerPageFragment : Fragment() {
 
 
     private fun setAccountContent() {
-        val args: com.ftclub.footballclub.ui.players.PlayerPageFragmentArgs by navArgs()
-        dbViewModel.getAccountById(args.accountId.toLong())
+        val args: PlayerPageFragmentArgs by navArgs()
+        dbViewModel.getAccountById(args.accountId)
 
         dbViewModel.accountById.observe(viewLifecycleOwner) { account ->
-            binding.playerEmail.text = account.accountEmail
-            binding.playerRegDate.text = account.dateTime
-            verifyForInformationEmpty(account)
-            navigation(account)
+            account?.let {
+                binding.email.text = account.accountEmail
+                verifyForInformationEmpty(account)
+                navigation(account)
+            }
         }
 
-        onCardClick()
         copyPhoneNumber()
     }
 
     private fun navigation(account: Accounts) {
-        binding.toPlayersFragment.setOnClickListener {
+        binding.back.setOnClickListener {
             findNavController().navigate(R.id.action_playerPageFragment_to_navigation_players)
         }
 
-        binding.editInformation.setOnClickListener {
-            val action =
-                com.ftclub.footballclub.ui.players.PlayerPageFragmentDirections.actionPlayerPageFragmentToPlayerEditFragment(
+        binding.edit.setOnClickListener {
+            findNavController().navigate(
+                PlayerPageFragmentDirections.actionPlayerPageFragmentToPlayerEditFragment(
                     account.id!!.toInt()
                 )
-            findNavController().navigate(action)
+            )
         }
     }
 
@@ -85,52 +84,27 @@ class PlayerPageFragment : Fragment() {
 
     private fun verifyForInformationEmpty(account: Accounts) {
         if (account.firstName.isEmpty()) {
-            binding.infPlayerName.text = "<Не указано>"
-            binding.playerPhone.text = "<Не указано>"
-            binding.playerPosition.text = "<Не указано>"
-            binding.playerFirstName.text = "<Не указано>"
-            binding.playerLastName.text = "<Не указано>"
-            binding.playerPositionInf.text = "<Не указано>"
-            binding.playerBirthday.text = "<Не указано>"
-
+            binding.FI.text = "<Не указано>"
+            binding.position.text = "<Не указано>"
+            binding.birthday.text = "<Не указано>"
+            binding.phoneNumber.text = "<Не указано>"
         } else {
-            binding.infPlayerName.text = "${account.firstName} ${account.lastName}"
-            binding.playerPhone.text = account.phoneNumber
-            binding.playerPosition.text = account.playerPosition
-            binding.playerFirstName.text = account.firstName
-            binding.playerLastName.text = account.lastName
-            binding.playerPositionInf.text = account.playerPosition
-            binding.playerBirthday.text = account.playerAge
+            binding.FI.text = "${account.firstName} ${account.lastName}"
+            binding.position.text = account.playerPosition
+            binding.birthday.text = account.playerAge
+            binding.phoneNumber.text = account.phoneNumber
         }
 
-        if (account.playerInformation.isEmpty()) binding.aboutPlayer.text =
+        if (account.playerInformation.isEmpty()) binding.playerInformation.text =
             "Пользователь не указал информацию о себе"
-        else binding.aboutPlayer.text = account.playerInformation
-    }
-
-    private fun onCardClick() {
-        binding.aboutPlayerCard.setOnClickListener {
-            TransitionManager.beginDelayedTransition(
-                binding.playerScrollView as ViewGroup?,
-                AutoTransition()
-            )
-            if (binding.expandablePart.visibility == View.VISIBLE) {
-                binding.expandablePart.visibility = View.GONE
-                binding.arrow.imageAlpha = 1
-                ViewsAnimation.arrowCardUpToDownAnimation(binding.arrow, requireContext())
-            } else {
-                binding.expandablePart.visibility = View.VISIBLE
-                binding.arrow.imageAlpha = 0
-                ViewsAnimation.arrowCardDownToUpAnimation(binding.arrow, requireContext())
-            }
-        }
+        else binding.playerInformation.text = account.playerInformation
     }
 
     private fun copyPhoneNumber() {
         binding.phoneCopy.setOnClickListener {
             val clipboard =
                 requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
-            val clip = ClipData.newPlainText("", binding.playerPhone.text.toString())
+            val clip = ClipData.newPlainText("", binding.phoneNumber.text.toString())
             clipboard.setPrimaryClip(clip)
 
             Toast.makeText(
@@ -145,5 +119,10 @@ class PlayerPageFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         setVisibilityBottomNavView(View.VISIBLE)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

@@ -11,8 +11,6 @@ import com.ftclub.footballclub.basic.room.accounts.accountsObject.Accounts
 import com.ftclub.footballclub.databinding.PlayersCardBinding
 import com.ftclub.footballclub.ui.BaseViewHolder
 import com.ftclub.footballclub.ui.ItemFingerprint
-import com.ftclub.footballclub.ui.players.PlayersFragmentDirections
-import com.ftclub.footballclub.ui.search.SearchFragment
 import com.ftclub.footballclub.ui.search.SearchFragmentDirections
 
 
@@ -44,11 +42,11 @@ class PlayersViewHolder(
 
     override fun onBind(item: Accounts) {
         voidNotice(item)
-        onCardClick(item)
+        //onCardClick(item)
     }
 
     private fun voidNotice(item: Accounts) {
-        if (item.firstName.isEmpty()) {
+        /* if (item.firstName.isEmpty()) {
             binding.notice.setBackgroundColor(
                 context.resources.getColor(
                     R.color.logout_color,
@@ -99,5 +97,6 @@ class PlayersViewHolder(
                 fragment.findNavController().navigate(action)
             }
         }
+    }*/
     }
 }

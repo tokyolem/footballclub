@@ -1,5 +1,6 @@
 package com.ftclub.footballclub.ui.administratorActivity.accounts
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -40,9 +41,14 @@ class AccountsAdapter(
             ?: throw java.lang.IllegalArgumentException("View type not found: $item")
     }
 
-    fun setData(accounts: List<Accounts>) {
+    fun setAccounts(accounts: List<Accounts>) {
         this.items = accounts
+        Log.d("TAF", "F")
         notifyDataSetChanged()
+    }
+
+    fun getAccountAt(position: Int): Accounts {
+        return items[position]
     }
 }
 
